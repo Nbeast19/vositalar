@@ -42,11 +42,11 @@ A free, open-source library of the great hadith collections — **Sahih al-Bukha
 - 📚 **الشرح بجانب الحديث**، والشرح يعيدك إلى حديثه.
 - 🎨 **لون لكل كتاب**، وضع فاتح وداكن، خط عربي جميل، والواجهة بالعربية والإنجليزية والأوزبكية. بلا حساب ولا إعلانات ولا تتبّع.
 
-¹ طبقة محلية تُبنى على جهازك من بيانات الشاملة و AuthenticIlm (للبحث والاستخدام الشخصي فقط)، وليست ضمن التنزيل العام بعد.
+¹ طبقة الأبواب والرواة (من بيانات الشاملة و AuthenticIlm، منشورة بإذن صاحب المصدر) تُثبَّت تلقائيًا مع الكتاب — [التنزيلات](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-qatlamlar-v1).
 
 </div>
 
-> ¹ **Local layer.** These three features come from a layer you build on your own device (Shamela / AuthenticIlm data, research and personal use only); it is **not** part of the public download yet.
+> ¹ **Chapters and narrators layer.** These three features come from a layer that installs automatically with each book (Shamela / AuthenticIlm data, published with the source owner's permission) — [download](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-qatlamlar-v1).
 >
 > **Sources and rights.** Hadith texts: Sunnah.com (shared with permission); commentaries: OpenITI (CC BY-NC-SA 4.0). **The chapter tree and the narrator chains come from a local layer** built from Shamela / AuthenticIlm data whose terms allow research and personal use only — it is built on your own device and is **not** part of the public download ([details](hadis-manba-platformasi/docs/RIGHTS.md)).
 

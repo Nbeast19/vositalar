@@ -22,7 +22,7 @@
 - 👤 **Narrator pages** ¹ — how many hadiths mention the narrator, at which positions, in which Kitāb › Bāb.
 - ✨ **Words of the Prophet ﷺ** are softly highlighted (display only — the source text never changes).
 
-¹ *Local layer:* built on your own device from Shamela / AuthenticIlm data (research and personal use only); not part of the public download yet.
+¹ *Chapters and narrators layer:* installs automatically with each book; Shamela / AuthenticIlm data, published with the source owner's permission ([download](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-qatlamlar-v1)).
 
 ![Hadith Library — reading Sahih al-Bukhari with Fath al-Bari beside it](docs/img/readme-reader-en.png)
 
