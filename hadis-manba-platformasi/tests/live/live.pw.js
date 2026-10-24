@@ -137,10 +137,14 @@ async function pwa(browser, lang, viewport, work, comm, unit, phrase) {
     await go(page, '#/h/' + unit);
     const nextHref = await page.locator('[data-act=next-unit]').first().getAttribute('href');
     assert.ok(nextHref && nextHref.startsWith('#/h/'), 'next: ' + nextHref);
+    // Havola bosilganda location.hash darhol o'zgaradi, hashchange va yangi render esa keyinroq keladi —
+    // shuning uchun yangi sahifaning o'z havolasini kutamiz (eski sahifadagi data-tayyor="1" emas).
     await page.locator('[data-act=next-unit]').first().click();
-    await page.waitForFunction(h => decodeURIComponent(location.hash) === decodeURIComponent(h) && document.querySelector('#asosiy').getAttribute('data-tayyor') === '1', nextHref);
+    await page.waitForFunction(([h, u]) => decodeURIComponent(location.hash) === decodeURIComponent(h) && document.querySelector('#asosiy').getAttribute('data-tayyor') === '1'
+      && decodeURIComponent(document.querySelector('[data-act=prev-unit]').getAttribute('href') || '') === '#/h/' + u, [nextHref, unit]);
     await page.locator('[data-act=prev-unit]').first().click();
-    await page.waitForFunction(u => decodeURIComponent(location.hash).endsWith(u) && document.querySelector('#asosiy').getAttribute('data-tayyor') === '1', unit);
+    await page.waitForFunction(([h, u]) => decodeURIComponent(location.hash).endsWith(u) && document.querySelector('#asosiy').getAttribute('data-tayyor') === '1'
+      && decodeURIComponent(document.querySelector('[data-act=next-unit]').getAttribute('href') || '') === decodeURIComponent(h), [nextHref, unit]);
     const nb = page.locator('[data-act=narrator]');
     if (await nb.count()) {
       await nb.click();
