@@ -1,6 +1,22 @@
-# HANDOFF — Hadis Manba (2026-10-23)
+# HANDOFF — Hadis Manba (2026-10-24)
 
 Bu fayl keyingi sessiya/agent uchun: nima qilingan, nima qolgan, qayerda nima turibdi. Foydalanuvchi bilan muloqot **o‘zbek tilida**.
+
+## V7 — mahalliy preview (2026-10-24) — **DEPLOY QILINMAGAN**
+
+Foydalanuvchining HADITH-LIBRARY-AUDIT-20261024 topshirig‘i (CLAUDE-YAGONA-TOPSHIRIQ §0–§24, DIZAYN-QARORI-V6, A01–A64). **Qat’iy shart:** foydalanuvchi natijani ko‘rib, nashrga aniq ruxsat bermaguncha deploy, push/merge, Release va paket e’loni yo‘q. Commitlar faqat lokal `claude/new-session-f9jsvi` branchida.
+
+- Oqim: Kitoblar → to‘plam (Kitob gridi) → Kitob mundarijasi `#/c/<pkg>?k=&b=` → reader `#/r/<pkg>?k=&u=|b=` → roviy indeksi `#/n/<person>?e=&from=&p=&g=` → yagona hadis `#/h/<unit>?p=&list=` → bog‘lanish stoli `#/desk/<work>?n=`.
+- Mahalliy qatlam: `scripts/build_overlay.py --raw <…/hadis-raqamlar/raw> --package <hm-bukhari-hj120-1.0.1.hmz> --out <repodan tashqari> --uz-draft <prototype-v6-source-data.json>`. U faqat mahalliy (QARORLAR 38–41) va katalogda yo‘q; Kutubxonam → «Fayldan o‘rnatish» orqali o‘rnatiladi.
+- Qabul jadvali: `docs/V7-QABUL-A01-A64.md`. Hisobot: `docs/V7-HISOBOT.md`.
+- Ochiq ishlar:
+  - o‘zbekcha tarjima qamrovi;
+  - harakatli sharh qatlami;
+  - boshqa to‘plamlar uchun bob va sanad indeksi;
+  - Nabiy ﷺ so‘zlari va dialog rollari;
+  - bobga sharh bog‘lash;
+  - statik sayt va Release registri (nashr ruxsatidan keyin);
+  - haqiqiy qurilmalar.
 
 ## 0. 27-bo‘lim — ENG MUHIM (2026-10-23)
 
@@ -20,6 +36,20 @@ Ochiq (27-bo‘lim):
 - **Mahalliy sanad indeksi yasaldi** (`scripts/build_isnad_index.py`, hujjat `docs/ISNAD-INDEX.md`, sinov `tests/test_isnad_index.py`): 7 277 dan 7 041 bog‘landi, 4 914 tasi bitta yo‘l bilan to‘liq tasdiqlangan (vositalar soni beriladi), 2 086 qisman, 41 ح tarmoqli. Natija repo/saytga kirmaydi. Keyingi qadam: ilovaga mahalliy import (yangi paket turi) va o‘quvchida to‘liq sanadni ko‘rsatish.
 - **Muallaqot**: hadith-json Buxoriyda faqat 97 “kitob” sarlavhasi, bob tarjimalari/muallaqot yo‘q; manbada muallaq tasnifi maydoni yo‘q (raqamlar.sqlite’da `muallaq` 0 ta). UI’da “tasniflanmagan” deb ochiq ko‘rsatiladi; Abu Sa’id al-Mu’allo kabi ism tasnifga ishlatilmaydi.
 - Paket ichidagi `persons` yozuvlarida `name_ar` yo‘q (faqat o‘zbekcha ism + normallashtirilgan taxallus); Buxoriyda roviy holati: verified 5 131, conflict 2 146.
+
+## V9 (2026-10-24) — qisqacha
+
+- Sanad qatlami **17 kitobga** (`scripts/build_overlay.py --all`): evidence (Buxoriy, Nasoiy), number_text (Termiziy), sequence (Muslim, Abu Dovud, Molik — page_isnads yo‘li ismlar bilan), text (qolganlari). Yangi modul `scripts/isnad_text.py` (ismlarni matnda topish, sanad bo‘laklari, identitet — `Resolver`).
+- O‘rinlar matn tuzilishidan (qaror #47), ism ichidan ism olinmaydi (#48), identitet tartibi (#49). Aniqlanmagan ism — `t<sha1>` shaxs, UI’da «shaxsi aniqlanmagan».
+- O‘zbekcha Kitob nomlari (`--kitab-names`, tahririy qoralama, mahalliy). README ko‘rgazmasi (banner + 4 surat, EN/AR), `og:image`.
+- Tekshiruv skriptlari (scratchpad, repo tashqarisida): `audit2.py` (o‘rin uzluksizligi), `audit3.py` (ism ichidan olingan / yo‘lga kirmagan bo‘laklar), `fullcheck.js` (brauzerda har Kitob), `dbg_unit.py` (bitta yozuvni qayta qurish).
+- Hisobot: `docs/V9-HISOBOT.md`; qarorlar #47–52. Foydalanuvchi ruxsati bilan `main`ga qo‘shildi (2026-10-24).
+
+## V8 (2026-10-24) — qisqacha
+
+- Boblar 13 kitobga (`scripts/build_overlay.py --all`), sanad: Buxoriy + Termiziy. Kitob o‘rnatilganda qatlam avtomatik (mahalliy katalog `overlay` maydoni).
+- Hadis sahifasida chap daraxt (sticky), «Faqat ismlar», roviy darajalari, roviy sahifasida o‘rin bo‘yicha saralash, Rasululloh ﷺ so‘zlari belgisi, kitob rangi dizayni. Service worker `hadis-manba-qobiq-v6`.
+- Hisobot: `docs/V8-HISOBOT.md`; qarorlar #42–46. O‘zbekcha tarjima — keyingi versiya.
 
 ## 1. Asosiy talablar (o‘zgarmaydi)
 

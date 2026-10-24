@@ -5,6 +5,8 @@
   var REQUIRED = ['package.json', 'LICENSE', 'ATTRIBUTION', 'COVERAGE.json', 'SHA256SUMS'];
   var DATA = ['data/entities.json', 'data/units.jsonl', 'data/occurrences.jsonl', 'data/links.jsonl',
     'data/evidence.jsonl', 'data/parallels.jsonl', 'data/corrections.jsonl', 'data/reviews.jsonl'];
+  // Mahalliy qatlam (kind=overlay): asosiy kitobning aniq versiyasiga bog'langan tuzilma/sanad/roviy/tarjima.
+  var OVERLAY = ['data/overlay/structure.json', 'data/overlay/isnad.jsonl', 'data/overlay/persons.jsonl', 'data/overlay/translations.jsonl'];
 
   async function sha256Hex(bytes) {
     var h = await crypto.subtle.digest('SHA-256', bytes);
@@ -23,7 +25,7 @@
     var errors = [];
     var files = await Zip.readAll(buf);
     Object.keys(files).forEach(function (n) {
-      if (REQUIRED.indexOf(n) < 0 && DATA.indexOf(n) < 0 && n.indexOf('packages/') !== 0) errors.push('ruxsat etilmagan fayl: ' + n);
+      if (REQUIRED.indexOf(n) < 0 && DATA.indexOf(n) < 0 && OVERLAY.indexOf(n) < 0 && n.indexOf('packages/') !== 0) errors.push('ruxsat etilmagan fayl: ' + n);
     });
     REQUIRED.forEach(function (n) { if (!files[n]) errors.push("majburiy fayl yo'q: " + n); });
     if (errors.length) throw new Error(errors.join('; '));
@@ -43,7 +45,9 @@
     var m = JSON.parse(text(files['package.json']));
     if (String(m.schema_version || '').split('.')[0] !== SCHEMA_MAJOR) throw new Error('sxema versiyasi mos emas');
     if (m.normalization_version !== Arabic.VERSION) throw new Error('normalizatsiya versiyasi mos emas: ' + m.normalization_version);
-    if (['base_book', 'commentary', 'selection'].indexOf(m.kind) < 0) throw new Error("noto'g'ri kind");
+    if (['base_book', 'commentary', 'selection', 'overlay'].indexOf(m.kind) < 0) throw new Error("noto'g'ri kind");
+    if (m.kind !== 'overlay' && Object.keys(files).some(function (n) { return OVERLAY.indexOf(n) >= 0; })) throw new Error('ruxsat etilmagan fayl: overlay');
+    if (m.kind === 'overlay' && !(m.target && m.target.package_id && m.target.package_sha256 && m.target.edition_id)) throw new Error("overlay: target yo'q");
     if (m.kind !== 'selection') {
       for (var f in (m.file_hashes || {})) {
         if (!files[f] || (await sha256Hex(files[f])) !== m.file_hashes[f]) throw new Error('manifest file_hashes mos emas: ' + f);
@@ -56,6 +60,14 @@
     pkg.links = jsonl(files['data/links.jsonl'], 'links.jsonl');
     pkg.evidence = jsonl(files['data/evidence.jsonl'], 'evidence.jsonl');
     pkg.parallels = jsonl(files['data/parallels.jsonl'], 'parallels.jsonl');
+    if (m.kind === 'overlay') {
+      pkg.overlay = {
+        structure: files['data/overlay/structure.json'] ? JSON.parse(text(files['data/overlay/structure.json'])) : null,
+        isnad: jsonl(files['data/overlay/isnad.jsonl'], 'isnad.jsonl'),
+        persons: jsonl(files['data/overlay/persons.jsonl'], 'persons.jsonl'),
+        translations: jsonl(files['data/overlay/translations.jsonl'], 'translations.jsonl')
+      };
+    }
     pkg.coverage = JSON.parse(text(files['COVERAGE.json']));
     pkg.license = text(files.LICENSE);
     pkg.attribution = text(files.ATTRIBUTION);

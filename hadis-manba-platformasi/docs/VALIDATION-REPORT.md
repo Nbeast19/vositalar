@@ -1,5 +1,20 @@
 # Sinov hisoboti
 
+## V7 mahalliy preview (2026-10-24) — deploy qilinmagan
+
+| Sinov | Natija | Dalil |
+|---|---|---|
+| pytest | **PASS — 76 o‘tdi, 10 skip** (skip = haqiqiy korpus) | `tests/*.py` (yangi: `tests/test_overlay.py`, 7 ta) |
+| Haqiqiy korpus (`HADIS_MANBA_REAL_HOME=…/library-run04`) | **PASS — 10/10** kesh isigach; birinchi sovuq ishga tushirishda 2,6 GB SQLite ustida API timeout sabab 8/10 yiqildi (asosiy commitda ham shunday; `src/` o‘zgarmagan) | `tests/test_real_corpus.py` |
+| Node | **PASS — 7/7** | `tests/web/core.node.test.js` |
+| Playwright E2E (20 ssenariy × en/ar × 1280/390) | **PASS — 80/80** | `tests/web/e2e.pw.js` (13–16: qatlam, o‘rin raqamlari, roviy indeksi, karantin) |
+| Haqiqiy ma’lumotli dalillar (Buxoriy + Fath + Umdat + mahalliy qatlam) | **PASS — 27/27 + 5/5**, sovuq offline PASS | `docs/V7-QABUL-A01-A64.md` |
+| Haqiqiy qurilmalar | **NOT TESTED** | — |
+
+Qabul jadvali: `docs/V7-QABUL-A01-A64.md`. Hisobot: `docs/V7-HISOBOT.md`.
+
+## Oldingi bosqich (2026-10-23)
+
 Sana: 2026-10-23. Buyruq: `sh scripts/verify.sh`. Faqat bajarilgan sinovlar "PASS" deb yozilgan.
 
 ## 1. Dastur ishlashi

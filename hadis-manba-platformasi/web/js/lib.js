@@ -95,7 +95,7 @@
     return { quota: e.quota, usage: e.usage, free: e.quota - e.usage };
   }
 
-  // onState(holat, izoh): 'tekshirish' | 'joy' | 'staging' | 'faollashtirish' | 'tayyorlik' | 'tayyor'
+  // onState(holat, izoh[, ulush 0–1]): 'tekshirish' | 'joy' | 'staging' | 'faollashtirish' | 'tayyorlik' | 'tayyor'
   async function install(buf, onState, opts) {
     onState = onState || function () {};
     opts = opts || {};
@@ -149,13 +149,14 @@
       });
     });
     pkg.evidence.forEach(function (e) { rows.push(['ents', { pkgv: pkgv, kind: 'evidence', id: e.evidence_id, data: e }]); });
+    if (m.kind === 'overlay') rows = rows.concat(overlayRows(pkg, pkgv, m));
     pkg.parallels.forEach(function (e) { rows.push(['ents', { pkgv: pkgv, kind: 'parallels', id: e.relation_id, data: e }]); });
     for (var i = 0; i < rows.length; i += CHUNK) {
       var part = rows.slice(i, i + CHUNK);
       var t = db.transaction(ROW_STORES, 'readwrite');
       part.forEach(function (r) { t.objectStore(r[0]).put(r[1]); });
       await done(t);
-      onState('staging', 'Yozildi: ' + Math.min(i + CHUNK, rows.length) + ' / ' + rows.length);
+      onState('staging', 'Yozildi: ' + Math.min(i + CHUNK, rows.length) + ' / ' + rows.length, .6 + .3 * Math.min(i + CHUNK, rows.length) / rows.length);
     }
     onState('faollashtirish', 'Faollashtirilmoqda');
     var t2 = db.transaction(['packages', 'versions'], 'readwrite');
@@ -178,7 +179,7 @@
         await done(t3);
       }
     }
-    tocCache = {};
+    tocCache = {}; ovCache = {}; occAllCache = {};
     onState('tayyorlik', 'Mahalliy qidiruv tayyorligi tekshirilmoqda');
     var ok = await verifyReady(rec, pkg);
     rec.offline_ready = ok;
@@ -190,6 +191,10 @@
   }
 
   async function verifyReady(rec, pkg) {
+    if (rec.kind === 'overlay') {
+      var got = await getAll('ents', 'pkgv', rec.active_pkgv);
+      return got.length === pkg.overlayRowCount;
+    }
     var units = await getAll('units', 'pkgv', rec.active_pkgv);
     var occ = await getAll('occ', 'pkgv', rec.active_pkgv);
     if (units.length !== pkg.units.length || occ.length !== pkg.occurrences.length) return false;
@@ -217,7 +222,7 @@
     });
     await done(tx);
     await deleteRows(p.active_pkgv);
-    tocCache = {};
+    tocCache = {}; ovCache = {}; occAllCache = {};
     return { package_id: id, action: 'removed' };
   }
 
@@ -256,6 +261,22 @@
   }
   async function unit(id) { return (await activeFilter(await getAll('units', 'unit_id', id)))[0] || null; }
   async function occurrence(id) { return (await activeFilter(await getAll('occ', 'occurrence_id', id)))[0] || null; }
+  // Bir nechta birlikni bitta tranzaksiyada asosiy kalit [pkgv, unit_id] bilan o'qish (Kitob o'qilishi uchun).
+  async function unitsByIds(pkgv, ids) {
+    var db = await openDb();
+    var st = db.transaction('units').objectStore('units');
+    return Promise.all(ids.map(function (id) { return req(st.get([pkgv, id])); }));
+  }
+  async function ovMany(kind, ids, editionId) {
+    var s = await overlayState(editionId);
+    if (s.state !== 'active') return {};
+    var db = await openDb();
+    var st = db.transaction('ents').objectStore('ents');
+    var rows = await Promise.all(ids.map(function (id) { return req(st.get([s.overlay.active_pkgv, kind, String(id)])); }));
+    var out = {};
+    rows.forEach(function (r, i) { if (r) out[ids[i]] = r.data; });
+    return out;
+  }
   async function unitsOf(pkgv) { return (await getAll('units', 'pkgv', pkgv)).sort(function (a, b) { return a.seq - b.seq; }); }
   async function occOf(pkgv) { return (await getAll('occ', 'pkgv', pkgv)).sort(function (a, b) { return a.seq - b.seq; }); }
 
@@ -368,6 +389,125 @@
     return out;
   }
 
+  // ---------------------------------------------------------------- mahalliy qatlam (overlay)
+  // Qatlam ents omboriga yoziladi (sxema o'zgarmaydi): ov_struct, ov_isnad, ov_person, ov_tr va roviy teskari indeksi ov_occ.
+  // ov_occ kaliti "<person>|<seq 6>|<tartib 3>" — kitob tartibida sahifalab o'qiladi (minglab natija DOMga birdan chiqmaydi).
+  function pad(n, w) { var s = String(n); while (s.length < w) s = '0' + s; return s; }
+  function overlayRows(pkg, pkgv, m) {
+    var ov = pkg.overlay || {}, rows = [];
+    var st = ov.structure || { kitabs: [], babs: [], unit_bab: {}, kitab_opening: [] };
+    rows.push(['ents', { pkgv: pkgv, kind: 'ov_struct', id: m.target.edition_id, data: st }]);
+    var kitOf = {};
+    (st.kitabs || []).forEach(function (k) { (k.unit_ids || []).forEach(function (u) { kitOf[u] = k.id; }); });
+    var counts = {};
+    function cnt(p) { return counts[p] || (counts[p] = { units: {}, routes: {}, mentions: 0, members: 0 }); }
+    (ov.isnad || []).forEach(function (r) {
+      rows.push(['ents', { pkgv: pkgv, kind: 'ov_isnad', id: r.unit_id, data: r }]);
+      var routeOf = {}, k = 0;
+      (r.routes || []).forEach(function (ro) {
+        (ro.nodes || []).forEach(function (n) {
+          var x = { route_id: ro.route_id, label: ro.label, pos: n.pos, of: ro.of };
+          (n.also || []).forEach(function (mid) { (routeOf[mid] = routeOf[mid] || []).push(x); });   // bir o'rindagi boshqa ustoz(lar)
+          if (n.mid) (routeOf[n.mid] = routeOf[n.mid] || []).push(x);
+          else {   // yo'l a'zosi, lekin sahifadagi havolasi yo'q: indeksda bor, matnda oralig'i yo'q
+            var p0 = String(n.person);
+            rows.push(['ents', { pkgv: pkgv, kind: 'ov_occ', id: m.target.edition_id + '|' + p0 + '|' + pad(r.seq, 6) + '|' + pad(900 + (k++), 3), data: { person: n.person, unit_id: r.unit_id, seq: r.seq,
+              mid: null, as_written: null, span: false, routes: [x], kitab_id: kitOf[r.unit_id] || null, bab_id: (st.unit_bab || {})[r.unit_id] || null,
+              number: r.evidence.printed_number, status: r.status } }]);
+            var c0 = cnt(p0); c0.units[r.unit_id] = 1; c0.routes[ro.route_id] = 1; c0.members++;
+          }
+        });
+      });
+      (r.mentions || []).forEach(function (mn, i) {
+        var p = String(mn.person), rts = routeOf[mn.mid] || [];
+        rows.push(['ents', { pkgv: pkgv, kind: 'ov_occ', id: m.target.edition_id + '|' + p + '|' + pad(r.seq, 6) + '|' + pad(i, 3), data: { person: mn.person, unit_id: r.unit_id, seq: r.seq,
+          mid: mn.mid, as_written: mn.as_written, span: !!mn.span, routes: rts, kitab_id: kitOf[r.unit_id] || null, bab_id: (st.unit_bab || {})[r.unit_id] || null,
+          number: r.evidence.printed_number, status: r.status } }]);
+        var c = cnt(p); c.units[r.unit_id] = 1; c.mentions++; rts.forEach(function (x) { c.routes[x.route_id] = 1; }); if (rts.length) c.members++;
+      });
+    });
+    var people = {};
+    (ov.persons || []).forEach(function (p) { people[String(p.person)] = p; });
+    Object.keys(counts).forEach(function (p) {
+      var c = counts[p];
+      var data = Object.assign({}, people[p] || { person: /^\d+$/.test(p) ? Number(p) : p }, { counts: { units: Object.keys(c.units).length, routes: Object.keys(c.routes).length, mentions: c.mentions, members: c.members } });
+      rows.push(['ents', { pkgv: pkgv, kind: 'ov_person', id: p, data: data }]);
+    });
+    (ov.translations || []).forEach(function (t) { rows.push(['ents', { pkgv: pkgv, kind: 'ov_tr', id: t.target, data: t }]); });
+    pkg.overlayRowCount = rows.length;
+    return rows;
+  }
+  // Qatlam faqat aynan o'sha asosiy paket (sha256) o'rnatilganda qo'llanadi; aks holda karantin, sabab bilan.
+  async function overlayState(editionId) {
+    var pk = await packages();
+    var ov = pk.find(function (p) { return p.kind === 'overlay' && p.manifest.target && p.manifest.target.edition_id === editionId; });
+    if (!ov) return { state: 'none' };
+    var base = pk.find(function (p) { return p.kind === 'base_book' && p.manifest.edition_id === editionId; });
+    var tg = ov.manifest.target;
+    if (!base) return { state: 'base_missing', overlay: ov, target: tg };
+    if (base.sha256 !== tg.package_sha256) return { state: 'mismatch', overlay: ov, target: tg, installed: { version: base.version, sha256: base.sha256 } };
+    return { state: 'active', overlay: ov, base: base, target: tg };
+  }
+  var ovCache = {};
+  async function ovEnt(kind, id, editionId) {
+    var s = await overlayState(editionId);
+    if (s.state !== 'active') return null;
+    var rows = await getAll('ents', 'kind_id', [kind, String(id)]);
+    var r = rows.find(function (x) { return x.pkgv === s.overlay.active_pkgv; });
+    return r ? r.data : null;
+  }
+  async function ovStructure(editionId) {
+    var s = await overlayState(editionId);
+    if (s.state !== 'active') return null;
+    var key = s.overlay.active_pkgv;
+    if (ovCache[key]) return ovCache[key];
+    var st = await ovEnt('ov_struct', editionId, editionId);
+    if (!st) return null;
+    var kit = {}, bab = {}, unitPlace = {};
+    st.kitabs.forEach(function (k, i) { k.i = i; kit[k.id] = k; });
+    st.babs.forEach(function (b, i) { b.i = i; bab[b.id] = b; });
+    Object.keys(st.unit_bab || {}).forEach(function (u) { unitPlace[u] = { bab: st.unit_bab[u] }; });
+    (st.kitab_opening || []).forEach(function (u) { unitPlace[u] = { opening: true }; });
+    ovCache[key] = { kitabs: st.kitabs, babs: st.babs, kit: kit, bab: bab, place: unitPlace, pkgv: key };
+    return ovCache[key];
+  }
+  // Kalit: nashr|roviy|tartib|indeks — bir nechta kitob qatlami o'rnatilganda ham har nashrning roviy ro'yxati alohida
+  function occRange(person, editionId) { var k = editionId + '|' + String(person) + '|'; return IDBKeyRange.bound(['ov_occ', k], ['ov_occ', k + '￿']); }
+  async function ovOccCount(person, editionId) {
+    var s = await overlayState(editionId);
+    if (s.state !== 'active') return 0;
+    var db = await openDb();
+    return req(db.transaction('ents').objectStore('ents').index('kind_id').count(occRange(person, editionId)));
+  }
+  // Sahifalangan o'qish: offset dan limit tagacha (kursor.advance) — butun natija xotiraga yuklanmaydi.
+  async function ovOccPage(person, editionId, offset, limit) {
+    var s = await overlayState(editionId);
+    if (s.state !== 'active') return [];
+    var db = await openDb();
+    return new Promise(function (res, rej) {
+      var out = [], skipped = !offset;
+      var r = db.transaction('ents').objectStore('ents').index('kind_id').openCursor(occRange(person, editionId));
+      r.onsuccess = function () {
+        var c = r.result;
+        if (!c) return res(out);
+        if (!skipped) { skipped = true; c.advance(offset); return; }
+        if (c.value.pkgv === s.overlay.active_pkgv) out.push(c.value.data);
+        if (out.length >= limit) return res(out);
+        c.continue();
+      };
+      r.onerror = function () { rej(r.error); };
+    });
+  }
+  // Roviyning shu nashrdagi barcha zikrlari (daraja bo'yicha sanash va saralash uchun; bir roviyda bir necha ming qatorgacha)
+  var occAllCache = {};
+  async function ovOccAll(person, editionId) {
+    var s = await overlayState(editionId);
+    if (s.state !== 'active') return [];
+    var k = s.overlay.active_pkgv + '|' + person;
+    if (!occAllCache[k]) occAllCache[k] = await ovOccPage(person, editionId, 0, 1e7);
+    return occAllCache[k];
+  }
+
   function fmtBytes(n) {
     if (n == null) return '?';
     if (n < 1024) return n + ' B';
@@ -380,5 +520,6 @@
     install: install, uninstall: uninstall, rollback: rollback, exportPackage: exportPackage, estimateFree: estimateFree,
     unit: unit, occurrence: occurrence, unitsOf: unitsOf, occOf: occOf, ent: ent, ents: ents,
     commentariesFor: commentariesFor, toc: toc, occToc: occToc, dropToc: dropToc, linksOfOccurrence: linksOfOccurrence, linkActivation: linkActivation,
-    resolve: resolve, versionOk: versionOk, fmtBytes: fmtBytes, DB_NAME: DB_NAME };
+    resolve: resolve, versionOk: versionOk, fmtBytes: fmtBytes, DB_NAME: DB_NAME,
+    unitsByIds: unitsByIds, ovMany: ovMany, overlayState: overlayState, ovStructure: ovStructure, ovEnt: ovEnt, ovOccCount: ovOccCount, ovOccPage: ovOccPage, ovOccAll: ovOccAll };
 })(self);

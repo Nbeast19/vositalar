@@ -55,6 +55,11 @@ def main():
     rows[2]["text_ar"] += " (تَصْحِيحٌ تَجْرِيبِيٌّ)"
     (v2 / "data" / "units.jsonl").write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), "utf-8")
     print("test:", build_package(v2, ROOT / "build" / "test-paketlar").name)
+    # E2E uchun sun'iy mahalliy qatlam (Kitob → Bob, sanad yo'llari, roviy indeksi) — ommaviy katalogga kirmaydi
+    import namuna_overlay
+    blob, _ = namuna_overlay.build(by_id["namuna-asos-a"][1])
+    (ROOT / "build" / "test-paketlar" / "namuna-overlay-a-1.0.0.hmz").write_bytes(blob)
+    print("test: namuna-overlay-a-1.0.0.hmz")
 
 
 if __name__ == "__main__":
