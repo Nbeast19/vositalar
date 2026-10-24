@@ -1,6 +1,6 @@
 # Hadith Library V9 — hisobot (2026-10-24)
 
-**Holat:** kod `claude/new-session-f9jsvi` branchida. Deploy, merge, Release va paket e’lon qilish **bajarilmagan**; jonli sayt o‘zgarmagan. Boblar, sanad va o‘zbekcha Kitob nomlari qatlamlari — faqat mahalliy (repo, Pages, Release’ga kirmaydi). O‘zbekcha tarjima hali qilinmadi (foydalanuvchi ko‘rsatmasi: keyingi yangilanishda).
+**Holat:** foydalanuvchi ruxsati bilan (2026-10-24) `main`ga qo‘shildi — jonli sayt va GitHub bosh sahifasi (README) yangilanadi. Yangi Release yoki paket e’lon qilinmadi. Boblar, sanad va o‘zbekcha Kitob nomlari qatlamlari — faqat mahalliy (repo, Pages, Release’ga kirmaydi). O‘zbekcha tarjima hali qilinmadi (foydalanuvchi ko‘rsatmasi: keyingi yangilanishda).
 
 ## Nima qilindi
 

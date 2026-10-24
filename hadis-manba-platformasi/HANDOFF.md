@@ -43,7 +43,7 @@ Ochiq (27-bo‘lim):
 - O‘rinlar matn tuzilishidan (qaror #47), ism ichidan ism olinmaydi (#48), identitet tartibi (#49). Aniqlanmagan ism — `t<sha1>` shaxs, UI’da «shaxsi aniqlanmagan».
 - O‘zbekcha Kitob nomlari (`--kitab-names`, tahririy qoralama, mahalliy). README ko‘rgazmasi (banner + 4 surat, EN/AR), `og:image`.
 - Tekshiruv skriptlari (scratchpad, repo tashqarisida): `audit2.py` (o‘rin uzluksizligi), `audit3.py` (ism ichidan olingan / yo‘lga kirmagan bo‘laklar), `fullcheck.js` (brauzerda har Kitob), `dbg_unit.py` (bitta yozuvni qayta qurish).
-- Hisobot: `docs/V9-HISOBOT.md`; qarorlar #47–51.
+- Hisobot: `docs/V9-HISOBOT.md`; qarorlar #47–52. Foydalanuvchi ruxsati bilan `main`ga qo‘shildi (2026-10-24).
 
 ## V8 (2026-10-24) — qisqacha
 
