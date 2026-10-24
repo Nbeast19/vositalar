@@ -379,7 +379,9 @@ function count(p) { return fetchLog.filter(x => x.endsWith(p)).length; }
       const art = '#u-' + A1.replace(':', '\\:');
       await E.page.click(art + ' .nm[data-person="901"]');
       await E.page.waitForSelector('[data-act=narrator-panel]');
-      await E.page.locator('[data-act=narrator-hadiths]').scrollIntoViewIfNeeded();
+      // tugma ekran o'rtasida (pastki tabbar ostida qolmasin — aks holda bosishda sahifa yana siljiydi)
+      await E.page.locator('[data-act=narrator-hadiths]').evaluate(el => el.scrollIntoView({ block: 'center' }));
+      await E.page.waitForTimeout(100);
       const y0 = await E.page.evaluate(() => Math.round(scrollY));   // chiqib ketish paytidagi joy
       await E.page.click('[data-act=narrator-hadiths]');
       await E.page.waitForFunction(() => document.querySelector('#asosiy').getAttribute('data-route') === 'n' && document.querySelector('#asosiy').getAttribute('data-tayyor') === '1');
