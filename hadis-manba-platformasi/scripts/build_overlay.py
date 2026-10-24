@@ -3,8 +3,9 @@
 Kitoblar ro'yxati — BOOKS. Boblar Shamela nusxasi bor har kitob uchun; sanad/roviylar faqat roviy havolali
 Shamela sahifalari va page_isnads mavjud kitoblar uchun (hozir: Buxoriy, Termiziy — Bashshor nashri orqali).
 
-Faqat foydalanuvchi qurilmasida o'rnatiladi (QARORLAR.md #37, #38). Manba — AuthenticIlm Shamela 4 nusxasi
-("Terms of use: Research and personal use"), shuning uchun natija repo, Release yoki saytga qo'shilmaydi.
+Manba — AuthenticIlm Shamela 4 nusxasi ("Terms of use: Research and personal use"); loyiha egasi manba egasidan
+ruxsat olinganini tasdiqlagan (2026-10-24, QARORLAR.md #53): qatlamlar alohida Release'da, sayt katalogida kitob yonida.
+Natija (va xom manba) gitga kirmaydi — --out repo ichida bo'lmasin.
 
 Kirish (read-only):
   raw/shamela-bukhari/pages.jsonl   Shamela 1681 (ط السلطانية) sahifalari

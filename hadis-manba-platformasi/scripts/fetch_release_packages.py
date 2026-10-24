@@ -28,18 +28,24 @@ def main():
     if not release:
         print("katalogda release yo'q — paket olinmaydi")
         return
+    # kitob yonidagi boblar va roviylar qatlami (overlay) o'z Release'ida bo'lishi mumkin (release_tag)
+    by_tag = {}
+    for p in entries + [p["overlay"] for p in entries if p.get("overlay")]:
+        by_tag.setdefault(p.get("release_tag") or release["tag"], []).append(p)
     with tempfile.TemporaryDirectory() as td:
-        subprocess.run(["gh", "release", "download", release["tag"], "--repo", release["repo"],
-                        "--pattern", "*.hmz", "--dir", td], check=True)
-        for p in entries:
-            src = Path(td) / Path(p["file"]).name
-            got = hashlib.sha256(src.read_bytes()).hexdigest()
-            if got != p["package_sha256"]:
-                raise SystemExit(f"SHA-256 mos emas: {src.name}")
-            dst = a.web / p["file"]
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy(src, dst)
-    print(f"{len(entries)} paket Release'dan olindi va tekshirildi ({release['tag']})")
+        for tag, items in by_tag.items():
+            d = Path(td) / tag
+            subprocess.run(["gh", "release", "download", tag, "--repo", release["repo"],
+                            "--pattern", "*.hmz", "--dir", str(d)], check=True)
+            for p in items:
+                src = d / Path(p["file"]).name
+                got = hashlib.sha256(src.read_bytes()).hexdigest()
+                if got != p["package_sha256"]:
+                    raise SystemExit(f"SHA-256 mos emas: {src.name}")
+                dst = a.web / p["file"]
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy(src, dst)
+    print(", ".join(f"{tag}: {len(items)} paket" for tag, items in by_tag.items()) + " — Release'dan olindi va tekshirildi")
 
 
 if __name__ == "__main__":

@@ -117,7 +117,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669513966,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-abudawud-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-abudawud-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-abudawud-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "أبو داود: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Abu Dawud: chapters, isnads and narrators (local layer)",
+     "uz": "Abu Dovud: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-abudawud-structure-0.2.0.hmz",
+    "package_sha256": "124ff1fa13a82397e7da41fe16a6bbc91f648ba8dec2873e23cc10ffe3a1a6de",
+    "compressed_bytes": 4462582,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018732,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-abudawud-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-ahmed-hj120",
@@ -236,7 +252,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669513968,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-ahmed-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-ahmed-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-ahmed-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "مسند أحمد: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Musnad Ahmad: chapters, isnads and narrators (local layer)",
+     "uz": "Musnad Ahmad: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-ahmed-structure-0.2.0.hmz",
+    "package_sha256": "ca93159f395ca7a299f0695ffac2b88a56455982f7809a45cd8dd91d26df4e42",
+    "compressed_bytes": 1979731,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018725,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-ahmed-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-aladab-almufrad-hj120",
@@ -354,7 +386,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669513962,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-aladab-almufrad-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-aladab-almufrad-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-adab-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "الأدب المفرد: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Al-Adab Al-Mufrad: chapters, isnads and narrators (local layer)",
+     "uz": "al-Adab al-mufrad: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-adab-structure-0.2.0.hmz",
+    "package_sha256": "c2b8c17662e9da1a216c94cb39fe8823956a3280f839a46727af384f3ae894ca",
+    "compressed_bytes": 1946590,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018730,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-adab-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-bukhari-hj120",
@@ -473,7 +521,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669513975,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-bukhari-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-bukhari-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-bukhari-structure-isnad",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "البخاري: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Bukhari: chapters, isnads and narrators (local layer)",
+     "uz": "Buxoriy: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-bukhari-structure-isnad-0.2.0.hmz",
+    "package_sha256": "809e8b54895dff62e6e712947a244f3a4a5d3e6322ceb8c9ea40569679a7a1e9",
+    "compressed_bytes": 3908704,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018728,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-bukhari-structure-isnad-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-bulugh-almaram-hj120",
@@ -589,7 +653,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669513957,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-bulugh-almaram-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-bulugh-almaram-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-bulugh-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "بلوغ المرام: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Bulugh al-Maram: chapters, isnads and narrators (local layer)",
+     "uz": "Bulug‘ul-marom: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-bulugh-structure-0.2.0.hmz",
+    "package_sha256": "034878aa72c02385787a86615c9db2f52d461de6f93e17d1610083353e1e99e2",
+    "compressed_bytes": 441782,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018729,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-bulugh-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-darimi-hj120",
@@ -706,7 +786,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514024,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-darimi-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-darimi-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-darimi-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "الدارمي: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Darimi: chapters, isnads and narrators (local layer)",
+     "uz": "Doromiy: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-darimi-structure-0.2.0.hmz",
+    "package_sha256": "51b4e4d142b070b159c595ae6bc176f896de565349a90556b6577c9ae30c849c",
+    "compressed_bytes": 2889124,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018741,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-darimi-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-ibnmajah-hj120",
@@ -824,7 +920,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514020,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-ibnmajah-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-ibnmajah-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-ibnmajah-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "ابن ماجه: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Ibn Majah: chapters, isnads and narrators (local layer)",
+     "uz": "Ibn Moja: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-ibnmajah-structure-0.2.0.hmz",
+    "package_sha256": "0bdd27bcac5708301cb097bfcdb694d82a3e8364a7566314ff598b72b9d2cf43",
+    "compressed_bytes": 3829151,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018743,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-ibnmajah-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-malik-hj120",
@@ -948,7 +1060,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514029,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-malik-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-malik-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-malik-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "الموطأ: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Muwatta: chapters, isnads and narrators (local layer)",
+     "uz": "Muvatto: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-malik-structure-0.2.0.hmz",
+    "package_sha256": "8285207f5cb06aa3510c6d56022c8d8b349b4e532fa47096439d5d4f0d2d2cc5",
+    "compressed_bytes": 899927,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018745,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-malik-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-mishkat-almasabih-hj120",
@@ -1065,7 +1193,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514035,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-mishkat-almasabih-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-mishkat-almasabih-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-mishkat-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "مشكاة المصابيح: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Mishkat al-Masabih: chapters, isnads and narrators (local layer)",
+     "uz": "Mishkotul-masobih: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-mishkat-structure-0.2.0.hmz",
+    "package_sha256": "31d2b48d0a845b1c687d24ae8c02134e795cf7b67d4e4ef0809c4e014b54f420",
+    "compressed_bytes": 1046190,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018747,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-mishkat-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-muslim-hj120",
@@ -1183,7 +1327,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514038,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-muslim-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-muslim-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-muslim-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "مسلم: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Muslim: chapters, isnads and narrators (local layer)",
+     "uz": "Muslim: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-muslim-structure-0.2.0.hmz",
+    "package_sha256": "d984b2a591bbd93c4e29f8ed7bbdd548d13d67f6cd0f498be5f920f71b70b109",
+    "compressed_bytes": 4096474,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018748,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-muslim-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-nasai-hj120",
@@ -1301,7 +1461,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514047,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-nasai-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-nasai-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-nasai-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "النسائي: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Nasa'i: chapters, isnads and narrators (local layer)",
+     "uz": "Nasoiy: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-nasai-structure-0.2.0.hmz",
+    "package_sha256": "0a231ed3214ba10ea8b475e0d4e821a0cdc9e06dd94306362167df193dd9cc01",
+    "compressed_bytes": 4294805,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018757,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-nasai-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-nawawi40-hj120",
@@ -1416,7 +1592,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514058,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-nawawi40-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-nawawi40-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-nawawi40-isnad",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "الأربعون النووية: الأسانيد والرواة (طبقة محلية)",
+     "en": "Nawawi's Forty: isnads and narrators (local layer)",
+     "uz": "Imom Navaviy 40 hadisi: sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-nawawi40-isnad-0.2.0.hmz",
+    "package_sha256": "920c5eee4d238ebaa87bfeaff764d5322a8b1fd6fe8aada4db32fd2814fddf17",
+    "compressed_bytes": 23205,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018759,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-nawawi40-isnad-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-qudsi40-hj120",
@@ -1522,7 +1714,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514067,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-qudsi40-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-qudsi40-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-qudsi40-isnad",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "الأربعون القدسية: الأسانيد والرواة (طبقة محلية)",
+     "en": "Forty Hadith Qudsi: isnads and narrators (local layer)",
+     "uz": "40 qudsiy hadis: sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-qudsi40-isnad-0.2.0.hmz",
+    "package_sha256": "188ee4f57da28bc0ba539c6a7301dd2ccfd3dce29cf977b1121972cf215e1982",
+    "compressed_bytes": 17991,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018760,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-qudsi40-isnad-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-riyad-assalihin-hj120",
@@ -1638,7 +1846,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514068,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-riyad-assalihin-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-riyad-assalihin-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-riyad-structure",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "رياض الصالحين: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Riyad as-Salihin: chapters, isnads and narrators (local layer)",
+     "uz": "Riyozus-solihin: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-riyad-structure-0.2.0.hmz",
+    "package_sha256": "c8148e00c5121c9638196e4cb5f3fafb983c67967e953ac79ddb5d3e352dad89",
+    "compressed_bytes": 473405,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018761,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-riyad-structure-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-shahwaliullah40-hj120",
@@ -1752,7 +1976,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514073,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-shahwaliullah40-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-shahwaliullah40-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-shahwaliullah40-isnad",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "أربعون شاه ولي الله: الأسانيد والرواة (طبقة محلية)",
+     "en": "Shah Waliullah's Forty: isnads and narrators (local layer)",
+     "uz": "Shoh Valiyulloh 40 hadisi: sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-shahwaliullah40-isnad-0.2.0.hmz",
+    "package_sha256": "2d6f6388752e5abef191377345b56d7a0c2051a00211bb0457fa20902761b46d",
+    "compressed_bytes": 4740,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018773,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-shahwaliullah40-isnad-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-shamail-muhammadiyah-hj120",
@@ -1868,7 +2108,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514074,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-shamail-muhammadiyah-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-shamail-muhammadiyah-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-shamail-isnad",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "الشمائل المحمدية: الأسانيد والرواة (طبقة محلية)",
+     "en": "Shamail Muhammadiyah: isnads and narrators (local layer)",
+     "uz": "Shamoili Muhammadiya: sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-shamail-isnad-0.2.0.hmz",
+    "package_sha256": "2cbf15a3777c98ab78f7b88e5a3741acc5002fc7966b4952132c3b129a5a2e26",
+    "compressed_bytes": 1219518,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018777,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-shamail-isnad-0.2.0.hmz"
+   }
   },
   {
    "package_id": "hm-tirmidhi-hj120",
@@ -1986,7 +2242,23 @@
    "commentary_on": null,
    "is_test_fixture": false,
    "release_asset_id": 669514230,
-   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-tirmidhi-hj120-1.0.1.hmz"
+   "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-paketlar-v1/hm-tirmidhi-hj120-1.0.1.hmz",
+   "overlay": {
+    "package_id": "hm-overlay-tirmidhi-structure-isnad",
+    "kind": "overlay",
+    "package_version": "0.2.0",
+    "title": {
+     "ar": "الترمذي: الأبواب والأسانيد والرواة (طبقة محلية)",
+     "en": "Tirmidhi: chapters, isnads and narrators (local layer)",
+     "uz": "Termiziy: boblar, sanad va roviylar (mahalliy qatlam)"
+    },
+    "file": "paketlar/hm-overlay-tirmidhi-structure-isnad-0.2.0.hmz",
+    "package_sha256": "5e14cd2dea9e6cd569fd2696ba9550c7b913a92622e72c95142956d0460ce4fc",
+    "compressed_bytes": 4261190,
+    "release_tag": "hadis-manba-qatlamlar-v1",
+    "release_asset_id": 673018780,
+    "download_url": "https://github.com/Nbeast19/vositalar/releases/download/hadis-manba-qatlamlar-v1/hm-overlay-tirmidhi-structure-isnad-0.2.0.hmz"
+   }
   }
  ],
  "note": "Faqat tarqatishga tasdiqlangan paketlar. Ommaviy demo to'liq mahalliy katalog bilan bir xil emas.",

@@ -147,10 +147,12 @@
   function sawText(s) { return sawOn ? s.replace(SAW_RE, 'ﷺ') : s; }
 
   // ---------------------------------------------------------------- nomlar
+  // 0.2.0 qatlam paketlari nomidagi «(mahalliy qatlam)» belgisi nashrdan oldin qo'yilgan — endi ko'rsatilmaydi (QARORLAR.md #53)
+  var LOCAL_TAG = /\s*\((?:local layer|mahalliy qatlam|طبقة محلية)\)$/;
   function titleOf(c) {
-    var tt = (c && c.title) || {};
-    var other = (I18N.lang() === 'uz' ? tt.uz : null) || tt.en || tt.uz || (c && c.package_id) || '';
-    return { ar: tt.ar || null, other: other };
+    var tt = (c && c.title) || {}, cut = function (x) { return x ? x.replace(LOCAL_TAG, '') : x; };
+    var other = cut((I18N.lang() === 'uz' ? tt.uz : null) || tt.en || tt.uz) || (c && c.package_id) || '';
+    return { ar: cut(tt.ar) || null, other: other };
   }
   async function workTitle(workId) {
     var w = await Lib.ent('works', workId);
@@ -556,9 +558,25 @@
   }
 
   // ---------------------------------------------------------------- o'rnatish
+  var installing = 0;   // o'rnatish ketayotganda yangi versiya sahifani qayta yuklamaydi (tugaguncha kutadi)
   async function installMany(list) {
-    for (var c of list) { try { await installFromCatalog(c); } catch (e) { break; } }
+    installing++;
+    try { for (var c of list) { try { await installFromCatalog(c); } catch (e) { break; } } }
+    finally { installing--; }
     route();
+  }
+  // Kitob avval o'rnatilgan, katalogda esa uning boblar va roviylar qatlami bor (keyinroq nashr qilingan) — qatlam o'zi qo'shiladi.
+  async function addMissingLayers() {
+    if (navigator.onLine === false) return;
+    var todo = [];
+    for (var c of catalog.packages) {
+      if (!c.overlay) continue;
+      var b = await Lib.getPackage(c.package_id);
+      if (!b || b.sha256 !== c.package_sha256) continue;
+      var o = await Lib.getPackage(c.overlay.package_id);
+      if (!o || o.sha256 !== c.overlay.package_sha256) todo.push(c.overlay);
+    }
+    if (todo.length) await installMany(todo);
   }
   async function installFromCatalog(c) {
     var inst = await Lib.getPackage(c.package_id);
@@ -579,8 +597,10 @@
   }
   async function doInstall(buf, name) {
     var st = progressBox(name);
+    installing++;
     try { var res = await Lib.install(buf, st.set); st.ok(res.map(function (r) { return r.package_id + ': ' + r.action; }).join(', ')); }
     catch (e) { st.fail(e.message); }
+    finally { installing--; }
   }
   async function readWithProgress(resp, expected, cb) {
     if (!resp.body || !resp.body.getReader) return resp.arrayBuffer();
@@ -2544,6 +2564,7 @@
     window.addEventListener('offline', netState);
     await route();
     document.documentElement.setAttribute('data-tayyor', '1');
+    addMissingLayers();
   }
 
   if ('serviceWorker' in navigator && navigator.serviceWorker && location.protocol !== 'file:') {
@@ -2559,7 +2580,12 @@
       });
     });
     var hadController = !!navigator.serviceWorker.controller, reloaded = false;
-    navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadController && !reloaded) { reloaded = true; location.reload(); } });
+    // yangi versiya o'zi faollashadi (sw.js skipWaiting) — sahifa qayta yuklanadi, o'rnatish ketayotgan bo'lsa tugagach
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (!hadController || reloaded) return;
+      reloaded = true;
+      (function wait() { if (installing) setTimeout(wait, 500); else location.reload(); })();
+    });
   }
   window.HadisApp = { route: route, seq: function () { return routeSeq; } };
   start();

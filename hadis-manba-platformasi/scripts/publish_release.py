@@ -1,6 +1,6 @@
 """Haqiqiy paketlarni GitHub Releases orqali nashr qilish (foydalanuvchi ruxsati: QARORLAR.md #26).
 
-Ikki bosqich:
+Bosqichlar:
 
   1) stage   — allowlist (public + conditional) paketlarini Release uchun alohida papkaga yig'adi:
                paketlar/*.hmz, SHA256SUMS, RIGHTS-PAKETLAR.md, RELEASE-NOTES.md
@@ -11,16 +11,22 @@ Ikki bosqich:
                nashrda ularni Release'dan olib web/paketlar/ ga qo'yadi (scripts/fetch_release_packages.py)
      python scripts/publish_release.py catalog --stage <papka> --assets <assets.json> --web web --base-url <URL>
 
+  3) layers  — boblar va roviylar qatlamlarini (alohida Release) catalog.json dagi kitoblarga ulaydi (QARORLAR.md #53)
+     python scripts/publish_release.py layers <qatlam.hmz ...> --assets <assets.json> --repo <owner/repo> --tag <tag>
+
 assets.json: [{"name": "...hmz", "id": 123}, ...] (GitHub release assets ro'yxati).
 Huquqi noma'lum (unknown/restricted) paketlar hech qachon tanlanmaydi — classify() qaroriga tayanadi.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
+import io
 import json
 import shutil
 import sys
 import tempfile
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -126,6 +132,34 @@ def catalog(stage_dir: Path, assets: Path, web: Path, base_url: str, repo: str, 
     return out
 
 
+def layers(packages: list[Path], assets: Path, web: Path, repo: str, tag: str) -> dict:
+    """Boblar va roviylar qatlamlarini (kind=overlay) web/catalog.json dagi asosiy kitobga `overlay` sifatida ulaydi:
+    ilova kitob bilan birga qatlamni ham o'rnatadi. Fayllar alohida Release'da; Pages nashrida paketlar/ ga olinadi
+    (scripts/fetch_release_packages.py). Manba egasining ruxsati bilan (QARORLAR.md #53)."""
+    ids = {a["name"]: a["id"] for a in json.loads(assets.read_text("utf-8"))}
+    f = web / "catalog.json"
+    cat = json.loads(f.read_text("utf-8"))
+    by_sha = {p["package_sha256"]: p for p in cat["packages"] if p["kind"] == "base_book"}
+    n = 0
+    for pk in packages:
+        data = pk.read_bytes()
+        m = json.loads(zipfile.ZipFile(io.BytesIO(data)).read("package.json"))
+        if m.get("kind") != "overlay":
+            raise SystemExit(f"{pk.name}: qatlam paketi emas")
+        base = by_sha.get(m["target"]["package_sha256"])
+        if not base:
+            raise SystemExit(f"{pk.name}: asosiy kitob katalogda yo'q (target.package_sha256 mos emas)")
+        if pk.name not in ids:
+            raise SystemExit(f"Release'da asset yo'q: {pk.name}")
+        base["overlay"] = {"package_id": m["package_id"], "kind": "overlay", "package_version": m["package_version"], "title": m.get("title"),
+                           "file": f"paketlar/{pk.name}", "package_sha256": hashlib.sha256(data).hexdigest(), "compressed_bytes": len(data),
+                           "release_tag": tag, "release_asset_id": ids[pk.name],
+                           "download_url": f"https://github.com/{repo}/releases/download/{tag}/{pk.name}"}
+        n += 1
+    f.write_text(json.dumps(cat, ensure_ascii=False, indent=1) + "\n", "utf-8")
+    return {"layers": n}
+
+
 def _en(p: dict) -> str:
     t = p.get("title") or {}
     return t.get("en") or t.get("uz") or p["package_id"]
@@ -199,6 +233,12 @@ def main():
     c.add_argument("--base-url", required=True)
     c.add_argument("--repo", required=True)
     c.add_argument("--tag", required=True)
+    q = sub.add_parser("layers")
+    q.add_argument("packages", type=Path, nargs="+")
+    q.add_argument("--assets", type=Path, required=True)
+    q.add_argument("--web", type=Path, default=ROOT / "web")
+    q.add_argument("--repo", required=True)
+    q.add_argument("--tag", required=True)
     m = sub.add_parser("meta")
     m.add_argument("--web", type=Path, default=ROOT / "web")
     m.add_argument("--out", type=Path, default=ROOT / "release")
@@ -208,6 +248,9 @@ def main():
     a = ap.parse_args()
     if a.cmd == "meta":
         print(json.dumps(meta(a.web, a.out, a.repo, a.tag, a.app_url)))
+        return
+    if a.cmd == "layers":
+        print(json.dumps(layers(sorted(a.packages), a.assets, a.web, a.repo, a.tag)))
         return
     if a.cmd == "stage":
         print(json.dumps(stage(sorted(a.packages), a.out, a.tag, a.repo)))

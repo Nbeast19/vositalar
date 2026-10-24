@@ -5,6 +5,8 @@ Paketlar (`.hmz`) **gitda saqlanmaydi**: har biri GitHub Release’da alohida as
 ## Joriy nashr
 - Release: [`hadis-manba-paketlar-v1`](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-paketlar-v1) — 17 asosiy kitob + 15 sharh, `SHA256SUMS`, `RIGHTS-PAKETLAR.md`.
 - Huquqi `unknown`/`restricted` paketlar tanlanmaydi (`publish.classify`) — mahalliy qoladi.
+- Boblar va roviylar qatlamlari: [`hadis-manba-qatlamlar-v1`](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-qatlamlar-v1) — 17 qatlam + `SHA256SUMS` (QARORLAR #53). Katalogda har kitob yonida `overlay` (`release_tag` bilan); Pages nashri ularni ham o‘z Release’idan olib, SHA-256 tekshiradi.
+  Yangi qatlam versiyasi: Release’ga yuklang, so‘ng `python3 scripts/publish_release.py layers <qatlam.hmz …> --assets <assets.json> --repo Nbeast19/vositalar --tag <teg>`.
 
 ## Yangi versiya chiqarish
 1. Paketlarni yasash: `python3 scripts/import_real.py --manba <0-Manba> --out <out> --commentaries`

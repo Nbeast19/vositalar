@@ -1,16 +1,17 @@
 // Service worker: faqat dastur qobig'ini oflayn ochadi. Kitob/sharh ma'lumoti IndexedDB'da
 // (foydalanuvchi tanlab o'rnatgan paketlar) — bu yerda yashirin keshlanmaydi.
-var VERSIYA = 'hadis-manba-qobiq-v6';
+var VERSIYA = 'hadis-manba-qobiq-v7';
 var QOBIQ = ['./', './index.html', './style.css', './manifest.webmanifest',
   './js/theme.js', './js/i18n.js', './js/registry.js', './js/arabic.js', './js/zip.js', './js/pkg.js', './js/lib.js', './js/notes.js', './js/app.js', './js/search-worker.js',
   './ikonkalar/ikonka-192.png', './ikonkalar/ikonka-512.png', './ikonkalar/apple-touch-icon.png',
   './fonts/NotoNaskhArabic-400.woff2', './fonts/NotoNaskhArabic-700.woff2',
   './fonts/Amiri-Arabic-400.woff2', './fonts/Amiri-Arabic-700.woff2', './fonts/Manrope-Latin-var.woff2', './fonts/Manrope-LatinExt-var.woff2'];
 
+// Yangi versiya kutib turmaydi: o'rnatilgach darhol faollashadi, ochiq sahifa o'zi qayta yuklanadi (app.js controllerchange).
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(VERSIYA).then(function (c) {
     return c.addAll(QOBIQ.map(function (f) { return new Request(f, { cache: 'reload' }); }));
-  }));
+  }).then(function () { return self.skipWaiting(); }));
 });
 self.addEventListener('message', function (e) { if (e.data === 'yangila') self.skipWaiting(); });
 self.addEventListener('activate', function (e) {

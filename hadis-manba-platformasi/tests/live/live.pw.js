@@ -65,7 +65,10 @@ async function seo() {
     const con = JSON.parse((await get(BASE + 'catalog-shartli.json')).text);
     const all = cat.packages.concat(con.packages);
     assert.strictEqual(all.length, 32);
-    for (const p of all) {
+    // boblar va roviylar qatlamlari (QARORLAR.md #53): kitob yonida, o'z Release'idan
+    const layers = cat.packages.filter(p => p.overlay).map(p => p.overlay);
+    assert.strictEqual(layers.length, 17, 'qatlamlar: ' + layers.length);
+    for (const p of all.concat(layers)) {
       const r = await fetch(BASE + p.file);
       assert.strictEqual(r.status, 200, p.file);
       const h = crypto.createHash('sha256').update(Buffer.from(await r.arrayBuffer())).digest('hex');
@@ -112,17 +115,23 @@ async function pwa(browser, lang, viewport, work, comm, unit, phrase) {
     await go(page, '#/books');
     assert.ok(await page.locator('[data-act=open-book]').count() >= 17);
   });
-  await step(L + ': install book + selected commentary from the catalogue', async () => {
+  let layer = null;
+  await step(L + ': install book + selected commentary (+ its chapters and narrators layer) from the catalogue', async () => {
+    const book = work.replace(/^w-/, 'hm-') + '-hj120';
+    layer = ((JSON.parse((await get(BASE + 'catalog.json')).text).packages.find(p => p.package_id === book) || {}).overlay || {}).package_id || null;
     await go(page, '#/w/' + work + '?tab=comms');
     await page.locator(`[data-act=pick-commentary][data-id="${comm}"]`).check();
     await page.click('[data-act=install-with]');
-    await poll(page, ids => Promise.all(ids.map(id => Lib.getPackage(id))).then(ps => ps.every(p => p && p.offline_ready)), [work.replace(/^w-/, 'hm-') + '-hj120', comm]);
-    const others = await page.evaluate(() => Lib.packages().then(ps => ps.map(p => p.package_id)));
-    assert.strictEqual(others.length, 2, 'faqat tanlangan paketlar: ' + others);
+    const want = [book, comm].concat(layer ? [layer] : []);
+    // Buxoriy qatlami (~4 MB, o'n minglab roviy yozuvi) brauzerda ~1,5 daqiqada saqlanadi — bir martalik
+    await poll(page, ids => Promise.all(ids.map(id => Lib.getPackage(id))).then(ps => ps.every(p => p && p.offline_ready)), want, 300000);
+    const got = await page.evaluate(() => Lib.packages().then(ps => ps.map(p => p.package_id)));
+    assert.deepStrictEqual(got.sort(), want.slice().sort(), 'faqat tanlangan paketlar (va kitob qatlami)');
   });
   await step(L + ': hadith → this commentary → back to hadith', async () => {
     await go(page, '#/h/' + unit);
     assert.strictEqual(await page.locator('.text-card p.src').getAttribute('dir'), 'rtl');
+    if (layer) assert.ok(await page.locator('.text-card p.src sup.ord').count() >= 1, 'sanad o\'rin raqamlari yo\'q');
     await page.waitForSelector('#sharh-panel[data-tayyor="1"]');
     const n = await page.locator('#sharh-panel [data-act=passage]').count();
     assert.ok(n >= 1, 'sharh havolasi yo\'q');
@@ -147,8 +156,9 @@ async function pwa(browser, lang, viewport, work, comm, unit, phrase) {
       && decodeURIComponent(document.querySelector('[data-act=next-unit]').getAttribute('href') || '') === decodeURIComponent(h), [nextHref, unit]);
     const nb = page.locator('[data-act=narrator]');
     if (await nb.count()) {
-      await nb.click();
-      await page.waitForSelector('[data-act=narrator-panel] .res-list li');
+      await nb.first().click();
+      // qatlam bilan panelda sanaddagi o'rinlar (.lvbar), qatlamsiz — hadislar ro'yxati
+      await page.waitForSelector('[data-act=narrator-panel] .res-list li, [data-act=narrator-panel] .lvbar');
       assert.ok(decodeURIComponent(page.url()).endsWith('#/h/' + unit), 'roviy paneli sahifani almashtirdi');
       assert.ok(await page.locator('.text-card p.src').isVisible());
     }

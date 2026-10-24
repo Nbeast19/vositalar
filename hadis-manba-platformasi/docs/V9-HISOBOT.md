@@ -1,6 +1,6 @@
 # Hadith Library V9 — hisobot (2026-10-24)
 
-**Holat:** foydalanuvchi ruxsati bilan (2026-10-24) `main`ga qo‘shildi — jonli sayt va GitHub bosh sahifasi (README) yangilanadi. Yangi Release yoki paket e’lon qilinmadi. Boblar, sanad va o‘zbekcha Kitob nomlari qatlamlari — faqat mahalliy (repo, Pages, Release’ga kirmaydi). O‘zbekcha tarjima hali qilinmadi (foydalanuvchi ko‘rsatmasi: keyingi yangilanishda).
+**Holat:** foydalanuvchi ruxsati bilan (2026-10-24) `main`ga qo‘shildi. Keyin (shu kuni, QARORLAR #53) boblar, sanad, roviylar va o‘zbekcha Kitob nomlari qatlamlari ham **ommaviy**: artifact’dagi 17 qatlam fayli o‘zgarmasdan [Release `hadis-manba-qatlamlar-v1`](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-qatlamlar-v1) da, saytda kitob bilan birga o‘rnatiladi. Hadis matnining o‘zbekcha tarjimasi hali qilinmadi (foydalanuvchi ko‘rsatmasi: keyingi yangilanishda).
 
 ## Nima qilindi
 
@@ -62,4 +62,4 @@
 - Sanad matndan o‘qiladigan kitoblarda (Ibn Moja, Doramiy, Ahmad, Adab, Riyoz, Bulug‘, Mishkot, Shamoil, 40 hadis) roviy shaxsi ism shakli va ustoz–shogird juftligi bilan aniqlanadi; aniqlanmagan ism «shaxsi aniqlanmagan» deb ochiq ko‘rsatiladi (o‘ylab topilmaydi).
 - Mishkot, Riyoz, Bulug‘ va Shoh Valiyulloh 40 hadisida ko‘p yozuvlar sanadsiz (faqat sahobiy nomi) — u yerda raqamlanadigan sanad yo‘q.
 - Juda murakkab izohli sanadlar (masalan Ahmaddagi «قال عبد الله: وجدت في كتاب أبي…») to‘liq tuzilmaga keltirilmagan.
-- Boblar, sanad va Kitob nomlari qatlami (Shamela/AuthenticIlm — «research and personal use») public repo/Pages/Release’ga chiqmaydi.
+- Boblar, sanad va Kitob nomlari qatlami (Shamela/AuthenticIlm; asl sharti «research and personal use») — loyiha egasi tasdiqlagan ruxsat bilan Release’da (QARORLAR #53); xom Shamela/AuthenticIlm fayllari repoga kirmaydi. Buxoriy qatlami brauzerda bir marta ~1,5 daqiqada saqlanadi.

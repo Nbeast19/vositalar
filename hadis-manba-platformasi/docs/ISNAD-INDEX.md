@@ -7,7 +7,7 @@
 | Savol | Javob |
 |---|---|
 | Indeks yasaladimi? | Ha, mahalliy: `scripts/build_isnad_index.py` → `isnad-bukhari-local.json` (repo va saytga kirmaydi). |
-| Ommaga chiqadimi? | **Yo‘q.** Ruxsat tasdiqlanmagan (pastda). |
+| Ommaga chiqadimi? | Indeks fayli — yo‘q. Undan yasalgan boblar/sanad/roviylar qatlamlari — **ha**, foydalanuvchi tasdiqlagan ruxsat bilan (2026-10-24, QARORLAR #53): [Release](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-qatlamlar-v1). |
 | Ilovada ko‘rinadimi? | Hali yo‘q. Ilova hozircha faqat Nabiy ﷺga eng yaqin (terminal) roviyni ko‘rsatadi va to‘liq sanad yo‘qligini ochiq yozadi. Mahalliy indeksni ilovaga o‘rnatish (paket turi + o‘quvchida ko‘rsatish) — keyingi bosqich. |
 
 ## Manba

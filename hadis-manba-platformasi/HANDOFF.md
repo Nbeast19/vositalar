@@ -44,6 +44,7 @@ Ochiq (27-bo‘lim):
 - O‘zbekcha Kitob nomlari (`--kitab-names`, tahririy qoralama, mahalliy). README ko‘rgazmasi (banner + 4 surat, EN/AR), `og:image`.
 - Tekshiruv skriptlari (scratchpad, repo tashqarisida): `audit2.py` (o‘rin uzluksizligi), `audit3.py` (ism ichidan olingan / yo‘lga kirmagan bo‘laklar), `fullcheck.js` (brauzerda har Kitob), `dbg_unit.py` (bitta yozuvni qayta qurish).
 - Hisobot: `docs/V9-HISOBOT.md`; qarorlar #47–52. Foydalanuvchi ruxsati bilan `main`ga qo‘shildi (2026-10-24).
+- **Qatlamlar ommaviy (QARORLAR #53, 2026-10-24):** foydalanuvchi AuthenticIlm’dan ham ruxsat olganini tasdiqladi. Artifact’dagi 17 `hm-overlay-*-0.2.0.hmz` o‘zgarmasdan [Release `hadis-manba-qatlamlar-v1`](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-qatlamlar-v1) ga (vaqtinchalik workflow commiti bilan yuklandi, commit branchdan olib tashlandi). `catalog.json` → `overlay`; `fetch_release_packages.py` bir nechta Release; ilova: avval o‘rnatilgan kitobga qatlam o‘zi qo‘shiladi, yangi versiya o‘zi faollashadi (sw v7).
 
 ## V8 (2026-10-24) — qisqacha
 
