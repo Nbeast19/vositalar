@@ -407,6 +407,7 @@
       (r.routes || []).forEach(function (ro) {
         (ro.nodes || []).forEach(function (n) {
           var x = { route_id: ro.route_id, label: ro.label, pos: n.pos, of: ro.of };
+          (n.also || []).forEach(function (mid) { (routeOf[mid] = routeOf[mid] || []).push(x); });   // bir o'rindagi boshqa ustoz(lar)
           if (n.mid) (routeOf[n.mid] = routeOf[n.mid] || []).push(x);
           else {   // yo'l a'zosi, lekin sahifadagi havolasi yo'q: indeksda bor, matnda oralig'i yo'q
             var p0 = String(n.person);
@@ -429,7 +430,7 @@
     (ov.persons || []).forEach(function (p) { people[String(p.person)] = p; });
     Object.keys(counts).forEach(function (p) {
       var c = counts[p];
-      var data = Object.assign({}, people[p] || { person: Number(p) }, { counts: { units: Object.keys(c.units).length, routes: Object.keys(c.routes).length, mentions: c.mentions, members: c.members } });
+      var data = Object.assign({}, people[p] || { person: /^\d+$/.test(p) ? Number(p) : p }, { counts: { units: Object.keys(c.units).length, routes: Object.keys(c.routes).length, mentions: c.mentions, members: c.members } });
       rows.push(['ents', { pkgv: pkgv, kind: 'ov_person', id: p, data: data }]);
     });
     (ov.translations || []).forEach(function (t) { rows.push(['ents', { pkgv: pkgv, kind: 'ov_tr', id: t.target, data: t }]); });

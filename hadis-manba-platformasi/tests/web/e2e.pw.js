@@ -354,7 +354,10 @@ function count(p) { return fetchLog.filter(x => x.endsWith(p)).length; }
       await go(E.page, '#/r/namuna-asos-a?k=0&u=' + encodeURIComponent(A1));
       const art = '#u-' + A1.replace(':', '\\:');
       assert.ok((await E.page.locator(art + ' sup.ord').count()) >= 1);
-      const before = await E.page.evaluate(sel => document.querySelector(sel + ' .src').textContent.replace(/[0-9A-Z,]+/g, ''), art);
+      // manba matni (UI qo'shimchalari — «matnda zikr qilinmagan roviylar» satri va o'rin raqamlari — hisobga olinmaydi)
+      const srcText = sel => E.page.evaluate(sel => { const c = document.querySelector(sel).cloneNode(true); c.querySelectorAll('.implied, sup.ord').forEach(x => x.remove()); return c.textContent; }, sel);
+      assert.ok((await E.page.locator(art + ' [data-act=implied-narrators]').count()) === 1);   // 903 — matnda yo'q, oldingi sanaddan
+      const before = await srcText(art + ' .src');
       await E.page.click('[data-act=settings]');
       const r = await E.page.evaluate(() => { const b = document.querySelector('.sheet').getBoundingClientRect(); return [b.left, b.right, b.top, b.bottom, innerWidth, innerHeight]; });
       assert.ok(r[0] >= 0 && r[1] <= r[4] && r[2] >= 0 && r[3] <= r[5] + 1, 'sozlamalar ekrandan chiqdi: ' + r.join(','));
@@ -364,7 +367,7 @@ function count(p) { return fetchLog.filter(x => x.endsWith(p)).length; }
       assert.strictEqual(await E.page.evaluate(() => getComputedStyle(document.querySelector('.hadith .src')).fontSize), '10px');
       await E.page.keyboard.press('Escape');
       assert.strictEqual(await E.page.locator('.sheet').count(), 0);
-      const after = await E.page.evaluate(sel => document.querySelector(sel + ' .src').textContent, art);
+      const after = await srcText(art + ' .src');
       assert.strictEqual(after, before);   // raqamlar yashirilgach matn aynan o'sha
       const ok = await E.page.evaluate(id => Lib.unit(id).then(u => Pkg.sha256Hex(new TextEncoder().encode(u.text_ar)).then(h => h === u.current_text_sha256)), A1);
       assert.ok(ok);
@@ -443,12 +446,17 @@ function count(p) { return fetchLog.filter(x => x.endsWith(p)).length; }
       await E.page.click('[data-act=chain-toggle]');
       assert.strictEqual(await E.page.locator('.tslot p.src.compact').count(), 0);
       assert.strictEqual(await E.page.evaluate(() => document.querySelector('.tslot p.src').textContent), full);   // asl matn aynan qaytdi
-      // boshqa yozuvda yo'l oxiri matnda yo'q -> ismlar qatori, matn kesilmaydi
+      // boshqa yozuvda yo'l oxiri matnda yo'q -> ismlar qatorida u ham bor (oldingi sanaddan), matn matnda zikr qilingan
+      // oxirgi roviydan keyin davom etadi
       await go(E.page, '#/h/' + A1.replace('u0001', 'u0002'));
-      const full2 = await E.page.evaluate(() => document.querySelector('.tslot p.src').textContent);
+      const full2 = await E.page.evaluate(() => { const c = document.querySelector('.tslot p.src').cloneNode(true); c.querySelectorAll('.implied, sup.ord').forEach(x => x.remove()); return c.textContent; });
       await E.page.click('[data-act=chain-toggle]');
-      await E.page.waitForSelector('.tslot p.src.compact.partial .chainline');
-      assert.ok(await E.page.evaluate(f => document.querySelector('.tslot p.src').textContent.indexOf(f.replace(/^\s+/, '').slice(0, 8)) >= 0, full2));
+      await E.page.waitForSelector('.tslot p.src.compact .chainline');
+      const c2 = await E.page.evaluate(() => { const p = document.querySelector('.tslot p.src.compact'), c = p.cloneNode(true);
+        c.querySelectorAll('.chainline, .implied, sup.ord').forEach(x => x.remove());
+        return { names: [...p.querySelectorAll('.chainline .nm')].map(b => b.getAttribute('data-person')), rest: c.textContent.trim() }; });
+      assert.deepStrictEqual(c2.names, ['902', '901', '903']);   // 903 — matnda yo'q, yo'l oxiridan
+      assert.ok(c2.rest.length > 0 && full2.trim().endsWith(c2.rest), 'matn davomi: ' + c2.rest);
       await E.page.click('[data-act=chain-toggle]');
       // roviy sahifasi: daraja bo'yicha saralash
       await go(E.page, '#/n/901?e=ed-namuna-a');

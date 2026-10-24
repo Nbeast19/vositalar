@@ -205,6 +205,12 @@ class Site:
 <meta property="og:url" content="{_e(self.url(lang, rel))}">
 <meta property="og:site_name" content="Hadith Library | مكتبة الحديث">
 <meta property="og:locale" content="{'ar_AR' if lang == 'ar' else 'en_US'}">
+<meta property="og:type" content="website">
+<meta property="og:image" content="{_e(self.base)}og-banner.png">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="840">
+<meta property="og:image:alt" content="Hadith Library | مكتبة الحديث — hadith collections with commentaries, chapters and narrator chains">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="{up}style.css">
 <link rel="icon" href="{up}ikonkalar/ikonka-192.png">
 </head>

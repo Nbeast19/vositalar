@@ -837,3 +837,9 @@ button.lvbar[aria-pressed="true"] { border-color: color-mix(in srgb, var(--lv) 5
 @media (max-width: 1699px) { .unit-layout .read-wrap { grid-template-columns: minmax(0, 1fr); } .unit-layout .inspector { position: static; max-height: none; overflow: visible; } }
 @media (max-width: 960px) { .unit-layout .menu-btn { display: inline-flex; } }
 @media (min-width: 961px) { .read-top .menu-btn { display: none; } }
+
+/* matnda zikr qilinmagan (oldingi sanaddan davom etadigan) roviylar — matn tepasida kichik satr */
+.src .implied { display: block; margin: 0 0 .4em; font-family: var(--ui); font-size: .5em; line-height: 1.8; color: var(--ink-3); }
+.src .implied bdi { font-family: var(--ar); font-size: 1.35em; color: var(--ink-2); margin-inline-start: .15em; }
+.src .implied sup.ord { margin-inline-end: .1em; }
+.note.warn { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }

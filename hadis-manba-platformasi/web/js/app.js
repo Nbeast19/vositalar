@@ -939,7 +939,8 @@
     if ((rec.reasons || []).length) box.appendChild(el('ul', { cls: 'tiny faint' }, rec.reasons.map(function (r) { return el('li', { text: t('chr.' + r.replace(/_([a-z])/g, function (_, c) { return c.toUpperCase(); })) }); })));
     box.appendChild(el('p', { cls: 'tiny faint', text: t('ch.convention') }));
     var ovs = await Lib.overlayState(edition), sm = ovs.overlay && ovs.overlay.manifest.source_metadata, isn = sm && sm.isnad;
-    if (isn) box.appendChild(el('p', { cls: 'tiny faint', 'data-act': 'isnad-source', text: t('ch.src', { s: isn.book_id }) + (isn.join === 'number_text' ? t('ch.srcOther') : '') }));
+    if (isn) box.appendChild(el('p', { cls: 'tiny faint', 'data-act': 'isnad-source', text: isn.join === 'text' ? t('ch.srcText')
+      : isn.join === 'sequence' ? t('ch.srcSeq', { s: isn.book_id }) : t('ch.src', { s: isn.book_id }) + (isn.join === 'number_text' ? t('ch.srcOther') : '') }));
     return box;
   }
 
@@ -1279,14 +1280,18 @@
   function routeInfo(rec) {
     var info = {};
     (rec.routes || []).forEach(function (ro) {
-      (ro.nodes || []).forEach(function (n) { if (n.mid) (info[n.mid] = info[n.mid] || []).push({ label: ro.label, pos: n.pos, of: ro.of, route_id: ro.route_id }); });
+      (ro.nodes || []).forEach(function (n) {
+        [n.mid].concat(n.also || []).forEach(function (mid) { if (mid) (info[mid] = info[mid] || []).push({ label: ro.label, pos: n.pos, of: ro.of, route_id: ro.route_id }); });
+      });
     });
     return info;
   }
+  // Yo'lning matnda zikr qilingan oxirgi roviysi (oxirgi tugunlar oldingi sanaddan bo'lsa — matnda yo'q)
   function terminalMid(rec) {
     var ro = (rec.routes || [])[0];
-    if (!ro || !ro.nodes.length) return null;
-    return ro.nodes[ro.nodes.length - 1].mid;
+    if (!ro) return null;
+    for (var i = ro.nodes.length - 1; i >= 0; i--) if (ro.nodes[i].mid) return ro.nodes[i].mid;
+    return null;
   }
   function ordText(x, multi) { return (multi ? x.label : '') + x.pos; }
   function lvCls(pos) { return pos ? ' lv' + Math.min(pos, 9) : ''; }
@@ -1341,6 +1346,14 @@
       if (opts.onNarrator) b.addEventListener('click', function () { opts.onNarrator(mm, m ? (info[m.mid] || []) : [{ label: ro.label, pos: n.pos, of: ro.of, route_id: ro.route_id }], b); });
       line.appendChild(b);
       if (pr.ord) line.appendChild(el('sup', { cls: 'ord' + lvCls(n.pos), 'aria-hidden': 'true', text: (multi ? ro.label : '') + n.pos }));
+      (n.also || []).forEach(function (mid) {
+        var am = byMid[mid];
+        if (!am || String(am.person) === String(n.person)) return;   // o'sha roviyning ikkinchi zikri («الثقفي … عبد الوهاب»)
+        line.appendChild(el('span', { cls: 'arr', 'aria-hidden': 'true', text: ' و ' }));
+        var ab = el('button', { type: 'button', cls: 'nm' + lvCls(n.pos), 'data-act': 'narrator', 'data-person': String(am.person), 'data-mid': am.mid, 'aria-label': am.as_written + ' — ' + t('np.position', { p: n.pos, n: ro.of }) }, [displayText(am.as_written, pr.marks)]);
+        if (opts.onNarrator) ab.addEventListener('click', function () { opts.onNarrator(am, info[am.mid] || [], ab); });
+        line.appendChild(ab);
+      });
     });
     if (u.attribution_kind === 'marfu') { line.appendChild(el('span', { cls: 'arr', 'aria-hidden': 'true', text: ' ← ' })); line.appendChild(el('span', { cls: 'nabi', text: 'النَّبِيُّ ﷺ' })); }
     if (multi) line.appendChild(el('span', { cls: 'more-routes tiny', lang: I18N.lang(), dir: 'auto', text: ' ' + t('rdv.moreRoutes', { n: rec.routes.length - 1 }) }));
@@ -1372,6 +1385,18 @@
     } else if (!pr.full && tm) {
       start = tm.span[0];
       p.appendChild(el('span', { cls: 'cut', lang: I18N.lang(), dir: 'auto', text: '… ' + t('rdv.shortened') + ' … ' }));
+    }
+    if (ok && !opts.plain && !p.classList.contains('compact') && (rec.routes || []).length) {
+      var imp = rec.routes[0].nodes.filter(function (n) { return !n.mid; });
+      if (imp.length) {
+        var hint = el('span', { cls: 'implied', lang: I18N.lang(), dir: 'auto', 'data-act': 'implied-narrators' }, [t('rdv.implied') + ' ']);
+        imp.forEach(function (n, k) {
+          if (k) hint.appendChild(document.createTextNode(' · '));
+          if (pr.ord) hint.appendChild(el('sup', { cls: 'ord' + lvCls(n.pos), text: (multi ? rec.routes[0].label : '') + n.pos }));
+          hint.appendChild(el('bdi', { lang: 'ar', dir: 'rtl', text: (rec._names || {})[String(n.person)] || ('man-' + n.person) }));
+        });
+        p.appendChild(hint);
+      }
     }
     // kesish nuqtalari: roviy oraliqlari va Nabiy ﷺ so'zlari chegaralari (matn bo'laklari aynan manbadagidek qo'shiladi)
     var cuts = {}; cuts[start] = 1; cuts[chars.length] = 1;
@@ -1864,6 +1889,9 @@
     });
     return b;
   }
+  // Roviy kimligi: roviylar bazasidagi ID yoki (matndan olingan, shaxs aniqlanmagan) ism — buni ochiq aytamiz
+  function isTextPerson(id) { return /^t[0-9a-f]+$/.test(String(id)); }
+  function personIdLine(id) { return isTextPerson(id) ? [el('span', { cls: 'warn-t', text: t('np.textName') })] : [t('np.id') + ': ', idTxt('man-' + id)]; }
   // Yo'l tugunlari matnda belgilanmagan bo'lsa — ismi roviylar ro'yxatidan (manba qisqa ismi)
   async function attachNames(recs, edition) {
     var need = {};
@@ -1926,7 +1954,7 @@
     box.appendChild(el('div', { cls: 'np-head' }, [
       el('div', {}, [el('div', { cls: 'np-name', lang: 'ar', dir: 'rtl', text: m.as_written }),
         person && person.short_name ? el('div', { cls: 'small', lang: 'ar', dir: 'rtl', text: person.short_name }) : null,
-        el('div', { cls: 'tiny faint' }, [t('np.id') + ': ', idTxt('man-' + m.person)])]),
+        el('div', { cls: 'tiny faint' }, personIdLine(m.person))]),
       el('button', { type: 'button', cls: 'icon-btn', 'aria-label': t('np.close'), 'data-act': 'narrator-close', on: { click: function () { slot.textContent = ''; slot.removeAttribute('data-mid'); rememberPanel(null); } } }, [icon('x')])]));
     box.appendChild(el('p', { cls: 'np-pos' }, rs.length ? rs.map(function (x) { return el('span', { cls: 'pill lvp' + lvCls(x.pos) }, [t('np.position', { p: x.pos, n: x.of }) + (multi ? ' · ' + t('np.route', { r: x.label }) : '')]); }) : [el('span', { cls: 'small faint', text: t('np.noRoute') })]));
     box.appendChild(el('p', { cls: 'np-big' }, [el('b', { text: String(c.units) }), ' ', el('span', { text: t('np.inHadiths') })]));
@@ -2033,12 +2061,13 @@
       el('div', { cls: 'eyebrow' }, [el('span', { cls: 'bk-dot', 'aria-hidden': 'true' }), arSpan(bd.title)]),
       el('h1', { lang: 'ar', dir: 'rtl', text: name }),
       person && person.long_name && person.long_name !== name ? el('p', { cls: 'small muted', lang: 'ar', dir: 'rtl', text: person.long_name }) : null,
-      el('p', { cls: 'tiny faint' }, [t('np.id') + ': ', idTxt('man-' + personId), ' · ', idTxt(ed)])]));
+      el('p', { cls: 'tiny faint' }, personIdLine(personId).concat([' · ', idTxt(ed)]))]));
     wrap.appendChild(el('div', { cls: 'np-counts' }, [
       el('div', {}, [el('b', { text: String(c.units) }), el('span', { text: t('np.units') })]),
       el('div', {}, [el('b', { text: String(c.routes) }), el('span', { text: t('np.routes') })]),
       el('div', {}, [el('b', { text: String(c.mentions) }), el('span', { text: t('np.mentions') })])]));
     wrap.appendChild(el('p', { cls: 'tiny faint', text: t('ni.scope', { book: bd.title, m: stats.mapped, t: stats.total }) }));
+    if (isTextPerson(personId)) wrap.appendChild(el('p', { cls: 'note warn small', 'data-act': 'text-name-note', text: t('ni.textNote') }));
     // darajalar: bosilsa ro'yxat shu o'ringa saralanadi (son va doira ko'rsatiladi)
     wrap.appendChild(el('div', { cls: 'lv-card' }, [el('h2', { cls: 'h3', text: t('np.levels') }), el('p', { cls: 'tiny faint', text: t('ni.levelNote') }),
       levelBars(lv, function (k) { replaceRoute(self(1, grouped, k == null ? null : String(k)), false); }, level)]));

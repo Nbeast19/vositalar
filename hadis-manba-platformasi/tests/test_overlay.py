@@ -114,7 +114,8 @@ def test_t01_nasab_is_not_a_separate_narrator(tmp_path):
     assert ibn_umar["span"][0] > text.index("أَنَّ")                    # nasab ichidagi "عبد الله بن عمر" emas
     route = r["routes"][0]
     assert [n["pos"] for n in route["nodes"]] == [1, 2, 3, 4] and route["nodes"][-1]["mid"] == ibn_umar["mid"]
-    assert "page_links_outside_route" in r["reasons"] and r["intermediaries"] is None   # parallel shayx: qat'iy son yo'q
+    abu_bakr = next(m for m in r["mentions"] if text[m["span"][0]:m["span"][1]] == "أَبُو بَكْرِ بْنُ أَبِي حَثْمَةَ")
+    assert route["nodes"][2].get("also") == [abu_bakr["mid"]]          # parallel shayx: Solim bilan bir o'rinda (3), «و»siz
 
 
 def test_bukhari8_ordinals_and_repeated_person_follow_route_order(tmp_path):
@@ -193,4 +194,42 @@ def test_other_edition_isnad_join_needs_number_and_text_or_names():
     assert bo.text_overlap("حَدَّثَنَا قُتَيْبَةُ عَنْ مَالِكٍ", "كلام آخر تماما لا صلة له") < 0.4
     assert all(cfg["overlay_id"].startswith("hm-overlay-") for cfg in bo.BOOKS.values())
     assert bo.BOOKS["bukhari"]["overlay_id"] == "hm-overlay-bukhari-structure-isnad"      # eski o'rnatishlar bilan mos
-    assert bo.BOOKS["tirmidhi"]["isnad"]["join"] == "number_text" and bo.BOOKS["ibnmajah"]["isnad"] is None
+    assert bo.BOOKS["tirmidhi"]["isnad"]["join"] == "number_text" and bo.BOOKS["ibnmajah"]["isnad"]["join"] == "text"
+
+
+def _structure(text):
+    """Matndan sanad tuzilishi (manba havolasiz): shaxs = ism yozilishi (sun'iy namuna)."""
+    toks = bo.tokens(text)
+    vocab = {"زيد", "عمرو", "خالد", "بكر", "بن", "ابو", "ابي", "سعيد", "عبد", "الله", "يحيي", "هشام", "عروه", "ابيه", "حماد"}
+    K = {"vocab": vocab, "firsts": frozenset({"زيد", "عمرو", "خالد", "بكر", "ابو", "ابي", "سعيد", "عبد", "يحيي", "هشام", "حماد"}),
+         "full_names": {}, "edges": set()}
+    u = {"unit_id": "u:1", "seq": 1, "text_ar": text, "current_text_sha256": "x"}
+    rec = bo.structure_record(u, toks, [], None, K, lambda w, sp, prev=None, nxt=None, final=True: " ".join(w), lambda p: [], {"join": "text_parse"}, set())
+    ms = {m["mid"]: m["as_written"] for m in rec["mentions"]}
+    return [[(n["pos"], ms[n["mid"]], [ms[x] for x in n.get("also", [])]) for n in r["nodes"]] for r in rec["routes"]]
+
+
+def test_structure_notes_nisba_my_father_and_joint_routes():
+    """«قال يحيى أخبرنا وقال الآخران حدثنا» — izoh; nisba ism ichida; «حدثني أبي» — roviy; «كلاهما عن» — yo'llar qo'shiladi."""
+    r = _structure("حَدَّثَنَا يَحْيَى بْنُ زَيْدٍ، وَعَمْرُو بْنُ خَالِدٍ الْبَصْرِيُّ، قَالَ يَحْيَى أَخْبَرَنَا وَقَالَ الآخَرَانِ، حَدَّثَنَا حَمَّادٌ، "
+                   "حَدَّثَنِي أَبِي، عَنْ سَعِيدٍ، عَنِ النَّبِيِّ صلى الله عليه وسلم")
+    assert r == [[(1, "يَحْيَى بْنُ زَيْدٍ", ["عَمْرُو بْنُ خَالِدٍ الْبَصْرِيُّ"]), (2, "حَمَّادٌ", []), (3, "أَبِي", []), (4, "سَعِيدٍ", [])]]
+    r = _structure("حَدَّثَنَا زَيْدٌ، حَدَّثَنَا بَكْرٌ، ح وَحَدَّثَنَا عَمْرٌو، حَدَّثَنَا خَالِدٌ، كِلاَهُمَا عَنْ هِشَامِ بْنِ عُرْوَةَ، عَنْ أَبِيهِ، "
+                   "عَنِ النَّبِيِّ صلى الله عليه وسلم")
+    words = [[w for _, w, _ in route] for route in r]
+    assert ["زَيْدٌ", "بَكْرٌ", "هِشَامِ بْنِ عُرْوَةَ", "أَبِيهِ"] in words and ["عَمْرٌو", "خَالِدٌ", "هِشَامِ بْنِ عُرْوَةَ", "أَبِيهِ"] in words
+
+
+def test_tahwil_joins_where_the_first_route_s_last_narrator_heard_from():
+    """«حدثنا زيد حدثنا بكر ح وحدثنا عمرو عن خالد عن هشام»: umumiy roviy birinchi yo'lda nomlanmagan — roviylar bazasida
+    «بكر — هشام dan» juftligi bo'lsa, birinchi yo'l هشام dan davom etadi; «وغير واحد» roviy emas."""
+    ids = {"زيد": 1, "بكر": 2, "عمرو": 3, "خالد": 4, "هشام": 5}
+    text = "حَدَّثَنَا زَيْدٌ، وَغَيْرُ وَاحِدٍ، قَالَا حَدَّثَنَا بَكْرٌ، ح وَحَدَّثَنَا عَمْرٌو، عَنْ خَالِدٍ، عَنْ هِشَامٍ، عَنِ النَّبِيِّ صلى الله عليه وسلم"
+    toks = bo.tokens(text)
+    K = {"vocab": set(ids) | {"غير", "واحد"}, "firsts": frozenset(ids), "full_names": {}, "edges": {(5, 2)}}
+    u = {"unit_id": "u:1", "seq": 1, "text_ar": text, "current_text_sha256": "x"}
+    rec = bo.structure_record(u, toks, [], None, K, lambda w, sp, prev=None, nxt=None, final=True: ids.get(w[0]), lambda p: [],
+                              {"join": "text_parse"}, set())
+    routes = sorted([[n["person"] for n in r["nodes"]] for r in rec["routes"]])
+    assert routes == [[1, 2, 5], [3, 4, 5]]
+    assert all(m["as_written"] != "غير واحد" and "غير" not in m["as_written"] for m in rec["mentions"])

@@ -37,6 +37,14 @@ Ochiq (27-bo‘lim):
 - **Muallaqot**: hadith-json Buxoriyda faqat 97 “kitob” sarlavhasi, bob tarjimalari/muallaqot yo‘q; manbada muallaq tasnifi maydoni yo‘q (raqamlar.sqlite’da `muallaq` 0 ta). UI’da “tasniflanmagan” deb ochiq ko‘rsatiladi; Abu Sa’id al-Mu’allo kabi ism tasnifga ishlatilmaydi.
 - Paket ichidagi `persons` yozuvlarida `name_ar` yo‘q (faqat o‘zbekcha ism + normallashtirilgan taxallus); Buxoriyda roviy holati: verified 5 131, conflict 2 146.
 
+## V9 (2026-10-24) — qisqacha
+
+- Sanad qatlami **17 kitobga** (`scripts/build_overlay.py --all`): evidence (Buxoriy, Nasoiy), number_text (Termiziy), sequence (Muslim, Abu Dovud, Molik — page_isnads yo‘li ismlar bilan), text (qolganlari). Yangi modul `scripts/isnad_text.py` (ismlarni matnda topish, sanad bo‘laklari, identitet — `Resolver`).
+- O‘rinlar matn tuzilishidan (qaror #47), ism ichidan ism olinmaydi (#48), identitet tartibi (#49). Aniqlanmagan ism — `t<sha1>` shaxs, UI’da «shaxsi aniqlanmagan».
+- O‘zbekcha Kitob nomlari (`--kitab-names`, tahririy qoralama, mahalliy). README ko‘rgazmasi (banner + 4 surat, EN/AR), `og:image`.
+- Tekshiruv skriptlari (scratchpad, repo tashqarisida): `audit2.py` (o‘rin uzluksizligi), `audit3.py` (ism ichidan olingan / yo‘lga kirmagan bo‘laklar), `fullcheck.js` (brauzerda har Kitob), `dbg_unit.py` (bitta yozuvni qayta qurish).
+- Hisobot: `docs/V9-HISOBOT.md`; qarorlar #47–51.
+
 ## V8 (2026-10-24) — qisqacha
 
 - Boblar 13 kitobga (`scripts/build_overlay.py --all`), sanad: Buxoriy + Termiziy. Kitob o‘rnatilganda qatlam avtomatik (mahalliy katalog `overlay` maydoni).

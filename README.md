@@ -3,6 +3,55 @@
 > **Hadith Library | مكتبة الحديث** — hadith collections and their commentaries, offline, with sources.
 > **[Open the app](https://nbeast19.github.io/vositalar/hadis-manba-platformasi/web/)** · [Guide (English)](hadis-manba-platformasi/README.md) · [الدليل (العربية)](hadis-manba-platformasi/README.ar.md) · [Downloads](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-paketlar-v1)
 
+<p align="center"><img src="hadis-manba-platformasi/docs/img/banner.png" alt="Hadith Library | مكتبة الحديث — hadith collections with their commentaries, chapters and narrator chains" width="100%"></p>
+
+## 📖 Hadith Library | مكتبة الحديث
+
+**[▶ Open the app](https://nbeast19.github.io/vositalar/hadis-manba-platformasi/web/)** · [Guide](hadis-manba-platformasi/README.md) · [الدليل](hadis-manba-platformasi/README.ar.md) · [Download books](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-paketlar-v1)
+
+A free, open-source library of the great hadith collections — **Sahih al-Bukhari, Sahih Muslim, the four Sunan, the Muwatta, Musnad Ahmad, Riyad as-Salihin, Mishkat al-Masabih** and more — read side by side with their **classical commentaries** (Fath al-Bari, Umdat al-Qari, al-Minhaj, Tuhfat al-Ahwadhi…). It installs like an app on phone, tablet and desktop and then works **offline**.
+
+| | |
+|---|---|
+| 🗂️ **Book → chapter tree** ¹ | Every Kitāb and Bāb as in the printed edition. The tree stays in place while you read and marks where you are. |
+| 🔗 **Chains you can read** ¹ | Every narrator in the isnād gets its position ¹²³. One tap shows **names only**: name ← name ← the Prophet ﷺ — without *ḥaddathanā / ʿan*. Parallel teachers share a position; a taḥwīl chain is numbered on its own. |
+| 👤 **Narrator pages** ¹ | How many hadiths in this book mention this narrator, at which positions in the chain (1st, 2nd, 3rd…), in which Kitāb › Bāb — colour-coded; tap any hadith to open it. |
+| ✨ **Words of the Prophet ﷺ** | His words are softly highlighted inside the text (display only — the source text is never changed). |
+| 📚 **Commentary beside the hadith** | Open Fath al-Bari or another commentary next to the hadith; the commentary leads back to its hadith. |
+| 🎨 **A colour for every book** | Light and dark themes, Arabic typography, English · العربية · Oʻzbekcha. No account, no ads, no tracking. |
+
+<p align="center">
+<img src="hadis-manba-platformasi/docs/img/showcase-chapters.png" alt="Sahih al-Bukhari: Kitab tree with chapters and the hadiths of a chapter" width="49%">
+<img src="hadis-manba-platformasi/docs/img/showcase-chain.png" alt="A hadith with numbered narrators, names-only chain and the narrator panel" width="49%">
+</p>
+<p align="center">
+<img src="hadis-manba-platformasi/docs/img/showcase-narrator.png" alt="Narrator page: positions in the chain and Kitab › Bab of every hadith" width="49%">
+<img src="hadis-manba-platformasi/docs/img/showcase-prophet.png" alt="Words of the Prophet highlighted in Sahih Muslim" width="49%">
+</p>
+
+<div dir="rtl" lang="ar">
+
+### بالعربية
+
+مكتبة مجانية مفتوحة المصدر لأمهات كتب الحديث — **صحيح البخاري، صحيح مسلم، السنن الأربع، الموطأ، مسند أحمد، رياض الصالحين، مشكاة المصابيح** وغيرها — تُقرأ مع **شروحها** (فتح الباري، عمدة القاري، المنهاج، تحفة الأحوذي…). تُثبَّت كتطبيق على الهاتف والحاسوب، ثم تعمل **بلا إنترنت**.
+
+- 🗂️ ¹ **شجرة الكتب والأبواب** كما في الطبعة، ثابتة في مكانها أثناء القراءة، تُظهر موضعك.
+- 🔗 ¹ **إسناد مقروء:** لكل راوٍ رقم موضعه في الإسناد ¹²³، وبلمسة واحدة **الأسماء فقط**: فلان ← فلان ← النبي ﷺ — دون «حدثنا / عن». الشيوخ المقرونون في موضع واحد، وإسناد التحويل يُرقَّم مستقلًّا.
+- 👤 ¹ **صفحة الراوي:** كم حديثًا في هذا الكتاب ورد فيه اسمه، وفي أي موضع من الإسناد، وفي أي كتاب وباب — ملوّنة، وبلمسة يُفتح الحديث.
+- ✨ **كلام النبي ﷺ مميَّز** داخل النص (عرضًا فقط؛ نص المصدر لا يتغيّر).
+- 📚 **الشرح بجانب الحديث**، والشرح يعيدك إلى حديثه.
+- 🎨 **لون لكل كتاب**، وضع فاتح وداكن، خط عربي جميل، والواجهة بالعربية والإنجليزية والأوزبكية. بلا حساب ولا إعلانات ولا تتبّع.
+
+¹ طبقة محلية تُبنى على جهازك من بيانات الشاملة و AuthenticIlm (للبحث والاستخدام الشخصي فقط)، وليست ضمن التنزيل العام بعد.
+
+</div>
+
+> ¹ **Local layer.** These three features come from a layer you build on your own device (Shamela / AuthenticIlm data, research and personal use only); it is **not** part of the public download yet.
+>
+> **Sources and rights.** Hadith texts: Sunnah.com (shared with permission); commentaries: OpenITI (CC BY-NC-SA 4.0). **The chapter tree and the narrator chains come from a local layer** built from Shamela / AuthenticIlm data whose terms allow research and personal use only — it is built on your own device and is **not** part of the public download ([details](hadis-manba-platformasi/docs/RIGHTS.md)).
+
+---
+
 ## 1. Bu nima
 
 Telefonda (iPhone) va kompyuterda ishlaydigan 5 ta oddiy veb-vosita: Qur'on yodlash va murojaa, Zettel kartalarini tekshirish, Anki fayllarini tozalash, YouTube darslar ro'yxatidan Notion uchun CSV yasash va dars transkripsiyasini tozalash. Hamma ma'lumot faqat sizning qurilmangizda saqlanadi, hech qayerga yuborilmaydi. Bir marta ochilgandan keyin internetsiz ham ishlaydi.

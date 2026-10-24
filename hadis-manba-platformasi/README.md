@@ -6,6 +6,24 @@
 
 ### ▶ [Open the app](https://nbeast19.github.io/vositalar/hadis-manba-platformasi/web/) · [Download books](https://github.com/Nbeast19/vositalar/releases/tag/hadis-manba-paketlar-v1) · [Quick start](docs/QUICKSTART.en.md)
 
+<p align="center"><img src="docs/img/banner.png" alt="Hadith Library | مكتبة الحديث — hadith collections with their commentaries, chapters and narrator chains" width="100%"></p>
+
+<p align="center">
+<img src="docs/img/showcase-chapters.png" alt="Sahih al-Bukhari: Kitab tree with chapters and the hadiths of a chapter" width="49%">
+<img src="docs/img/showcase-chain.png" alt="A hadith with numbered narrators, names-only chain and the narrator panel" width="49%">
+</p>
+<p align="center">
+<img src="docs/img/showcase-narrator.png" alt="Narrator page: positions in the chain and Kitab › Bab of every hadith" width="49%">
+<img src="docs/img/showcase-prophet.png" alt="Words of the Prophet highlighted in Sahih Muslim" width="49%">
+</p>
+
+- 🗂️ **Book → chapter tree** ¹ — every Kitāb and Bāb as in the printed edition; the tree stays in place and marks where you are.
+- 🔗 **Chains you can read** ¹ — every narrator gets its position ¹²³; one tap shows **names only** (name ← name ← the Prophet ﷺ), without *ḥaddathanā / ʿan*.
+- 👤 **Narrator pages** ¹ — how many hadiths mention the narrator, at which positions, in which Kitāb › Bāb.
+- ✨ **Words of the Prophet ﷺ** are softly highlighted (display only — the source text never changes).
+
+¹ *Local layer:* built on your own device from Shamela / AuthenticIlm data (research and personal use only); not part of the public download yet.
+
 ![Hadith Library — reading Sahih al-Bukhari with Fath al-Bari beside it](docs/img/readme-reader-en.png)
 
 1. **Open the app** and choose a book (17 collections, 15 commentaries).
